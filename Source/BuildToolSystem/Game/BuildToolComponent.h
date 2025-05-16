@@ -6,7 +6,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActiveToolChanged, int32, ToolIndex);
 
-UCLASS(meta = (BlueprintSpawnableComponent))
+UCLASS(Within = PlayerController, meta = (BlueprintSpawnableComponent))
 class BUILDTOOLSYSTEM_API UBuildToolComponent : public UActorComponent {
 	GENERATED_BODY()
 
@@ -14,8 +14,10 @@ private:
 	void CreateTools();
 
 protected:
+	UPROPERTY(Category = "References", BlueprintReadOnly)
+	TObjectPtr<APlayerController> OwningController;
 
-	UPROPERTY(Category = "References", VisibleInstanceOnly, BlueprintReadOnly)
+	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TArray<TObjectPtr<UBuildTool>> Tools;
 
 	UPROPERTY(Category = "Tools", VisibleInstanceOnly, BlueprintReadOnly)

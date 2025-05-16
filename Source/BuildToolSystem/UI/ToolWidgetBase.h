@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
-#include "ToolOverlayWidget.generated.h"
+#include "ToolWidgetBase.generated.h"
 
 class UBuildToolComponent;
 
 UCLASS(Abstract)
-class BUILDTOOLSYSTEM_API UToolOverlayWidgetBase : public UCommonUserWidget {
+class BUILDTOOLSYSTEM_API UToolWidgetBase : public UCommonUserWidget {
 	GENERATED_BODY()
 
 protected:

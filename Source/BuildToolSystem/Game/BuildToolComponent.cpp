@@ -9,6 +9,7 @@ void UBuildToolComponent::CreateTools() {
 	Tools.Reset(toolTypes.Num());
 	for (UClass* toolClass : toolTypes) {
 		UBuildTool* tool = NewObject<UBuildTool>(this, toolClass);
+		tool->InitializeTool(GetOwner<APlayerController>());
 		UE_LOG(LogToolSystem, Log, TEXT("Created tool with name '%s'"), *tool->ToolName.ToString());
 		Tools.Add(tool);
 	}
