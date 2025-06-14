@@ -17,7 +17,7 @@ bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 
 	FVector location, direction;
 	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) {
-		UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
+		//UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
 		return false;
 	}
 
@@ -28,7 +28,7 @@ bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 	return GetWorld()->LineTraceSingleByChannel(hit, location, end, channel, queryParams, responseParams);
 }
 
-bool UBuildTool::Raycast(TArray<FHitResult>& hits, const ECollisionChannel& channel,
+bool UBuildTool::Raycast(FHitResults& hits, const ECollisionChannel& channel,
 	const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
 	if (!OwnedController) {
 		UE_LOG(LogToolSystem, Error, TEXT("No owned controller, tool raycast cannot execute"));
@@ -37,7 +37,7 @@ bool UBuildTool::Raycast(TArray<FHitResult>& hits, const ECollisionChannel& chan
 
 	FVector location, direction;
 	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) {
-		UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
+		//UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
 		return false;
 	}
 
@@ -54,10 +54,19 @@ bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, FHitResul
 	return GetWorld()->SweepSingleByChannel(hit, lineHit.Location, lineHit.Location, FQuat::Identity, channel, FCollisionShape::MakeSphere(radius), queryParams, responseParams);
 }
 
-bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, TArray<FHitResult>& hits, const ECollisionChannel& channel,
+bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, FHitResults& hits, const ECollisionChannel& channel,
 	const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
 	if (!Raycast(lineHit, ECC_Visibility, queryParams)) return false;
 	return GetWorld()->SweepMultiByChannel(hits, lineHit.Location, lineHit.Location, FQuat::Identity, channel, FCollisionShape::MakeSphere(radius), queryParams, responseParams);
+}
+
+bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, FTraceHitResults& hits, const ECollisionChannel& channel, const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
+	// as the SweepMultiByChannel only accepts TArray<FHitResult> the results need to be copied over to the new type array
+	FHitResults originalHits;
+	const bool result = RangeRaycast(radius, lineHit, originalHits, channel, queryParams, responseParams);
+	hits.Reset(originalHits.Num());
+	hits.Append(originalHits);
+	return result;
 }
 
 #undef RAYCAST_DEBUG

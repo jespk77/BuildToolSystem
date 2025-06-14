@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TraceHitResult.h"
 #include "../UI/ToolPropertiesWidget.h"
 #include "BuildTool.generated.h"
 
@@ -23,7 +24,8 @@ protected:
 	bool Raycast(FHitResult& hit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-	bool Raycast(TArray<FHitResult>& hits, const ECollisionChannel& channel = ECC_Visibility,
+
+	bool Raycast(FHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
@@ -33,19 +35,24 @@ protected:
 		FHitResult lineHit;
 		return RangeRaycast(radius, lineHit, hit, channel, queryParams, responseParams);
 	}
+
 	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResult& resultHit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
-	bool RangeRaycast(const float radius, TArray<FHitResult>& hits, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const {
-		FHitResult lineHit;
-		return RangeRaycast(radius, lineHit, hits, channel, queryParams, responseParams);
-	}
-	bool RangeRaycast(const float radius, FHitResult& lineHit, TArray<FHitResult>& hits, const ECollisionChannel& channel = ECC_Visibility,
+	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
+
+	bool RangeRaycast(const float radius, FHitResult& lineHit, FTraceHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
+		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
+		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
+
+	bool RangeRaycast(const float radius, FTraceHitRangeResult& hit, const ECollisionChannel& channel = ECC_Visibility,
+		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
+		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const {
+		return RangeRaycast(radius, hit.Line, hit.Hits, channel, queryParams, responseParams);
+	}
 
 	template<class ControllerType>
 	inline ControllerType* GetController() const { return Cast<ControllerType>(OwnedController); }
