@@ -16,7 +16,7 @@ public:
 	UPROPERTY(Category = "Class data", Config, EditAnywhere)
 	TSubclassOf<UUserWidget> ToolWidget;
 
-	bool IsValid() const { return ToolClass && ToolWidget && !ToolClass->HasAnyClassFlags(CLASS_Abstract); }
+	bool IsValid() const { return ToolClass && !ToolClass->HasAnyClassFlags(CLASS_Abstract); }
 };
 
 UCLASS(Config = Engine, DefaultConfig, meta = (DisplayName = "Tool System"))
