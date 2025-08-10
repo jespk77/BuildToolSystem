@@ -1,14 +1,16 @@
 #include "BuildToolComponent.h"
-#include "BlueprintUtilities/BlueprintFunctionLibrary/ClassUtilities.h"
+#include "../BuildToolSettings.h"
 
 void UBuildToolComponent::CreateTools() {
-	TSet<UClass*> toolTypes;
-	UClassUtilities::GetAllClassesOfType<UBuildTool>(toolTypes);
+	const TArray<FToolSettings>& toolTypes = GetDefault<UBuildToolSettings>()->Tools;
 	UE_LOG(LogToolSystem, Log, TEXT("Found and creating custom %d tool classes..."), toolTypes.Num());
 
 	Tools.Reset(toolTypes.Num());
-	for (UClass* toolClass : toolTypes) {
-		UBuildTool* tool = NewObject<UBuildTool>(this, toolClass);
+	for (const FToolSettings& settings : toolTypes) {
+		if (!settings.IsValid()) continue;
+
+		UBuildTool* tool = NewObject<UBuildTool>(this, settings.ToolClass);
+		tool->ToolWidget = settings.ToolWidget;
 		tool->InitializeTool(GetOwner<APlayerController>());
 		UE_LOG(LogToolSystem, Log, TEXT("Created tool with name '%s'"), *tool->ToolName.ToString());
 		Tools.Add(tool);

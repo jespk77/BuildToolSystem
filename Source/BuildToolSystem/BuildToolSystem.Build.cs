@@ -1,9 +1,7 @@
 using UnrealBuildTool;
 
-public class BuildToolSystem : ModuleRules
-{
-    public BuildToolSystem(ReadOnlyTargetRules target) : base(target)
-    {
+public class BuildToolSystem : ModuleRules {
+    public BuildToolSystem(ReadOnlyTargetRules target) : base(target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PublicDependencyModuleNames.AddRange(new string[] {
@@ -14,7 +12,8 @@ public class BuildToolSystem : ModuleRules
             "CoreUObject", "Engine",
             "Slate", "SlateCore", "UMG",
             "CommonUI", "InputCore",
-            "BlueprintUtilities", "WidgetUtilities",
+            "DeveloperSettings",
+            "WidgetUtilities",
         });
     }
 }
