@@ -3,11 +3,9 @@
 #include "Components/PanelWidget.h"
 #include "Widgets/Input/SSlider.h"
 #include "Widgets/Layout/SUniformWrapPanel.h"
-#if WITH_EDITORONLY_DATA
-#include "WidgetUtilities/Widgets/DynamicEditorWidget.h"
-#endif
 
 #include "../Game/BuildToolComponent.h"
+#include "ToolWidgetInterface.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -28,12 +26,17 @@ void UToolPropertiesWidgetBase::OnActiveToolChanged_Implementation(int32 index) 
 	UBuildTool* tool = ToolComponent->GetActiveTool();
 	UUserWidget* newWidget;
 
-	if (IsValid(tool) && tool->ToolWidget) newWidget = CreateWidget(this, tool->ToolWidget, "ToolWidget");
+	if (IsValid(tool) && tool->ToolWidget) newWidget = CreateWidget(this, tool->ToolWidget);
 	else newWidget = nullptr;
 
 	if (newWidget != ActiveWidget) {
-		if (ActiveWidget) ActiveWidget->Destruct();
+		if (ActiveWidget) {
+			if (ActiveWidget->Implements<UToolWidgetInterface>()) IToolWidgetInterface::Execute_OnToolWidgetDeactivated(ActiveWidget);
+			ActiveWidget->Destruct();
+		}
+
 		ActiveWidget = newWidget;
+		if (ActiveWidget && ActiveWidget->Implements<UToolWidgetInterface>()) IToolWidgetInterface::Execute_OnToolWidgetActivated(ActiveWidget, tool);
 		SetPropertyWidget(ActiveWidget);
 	}
 }

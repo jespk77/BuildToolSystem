@@ -6,9 +6,6 @@
 
 class UBuildTool;
 class UBuildToolComponent;
-#if WITH_EDITORONLY_DATA
-class UDynamicEditorWidget;
-#endif
 
 UCLASS(Abstract)
 class BUILDTOOLSYSTEM_API UToolPropertiesWidgetBase : public UCommonUserWidget {
