@@ -1,5 +1,5 @@
 #include "ToolWidgetBase.h"
-#include "../Game/BuildToolComponent.h"
+#include "BuildToolSystem/Components/BuildToolComponent.h"
 #include "Components/LineBatchComponent.h"
 
 void UToolWidgetBase::NativeConstruct() {

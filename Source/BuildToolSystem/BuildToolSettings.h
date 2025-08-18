@@ -29,4 +29,7 @@ public:
 
 	UPROPERTY(Category = "Tools", Config, EditAnywhere)
 	TArray<FToolSettings> Tools;
+
+	UPROPERTY(Category = "Selection", Config, EditAnywhere)
+	TEnumAsByte<ECollisionChannel> SelectionTraceChannel = ECC_Camera;
 };

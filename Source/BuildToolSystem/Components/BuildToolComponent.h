@@ -1,13 +1,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BuildTool.h"
+#include "ObjectSelectionComponent.h"
 #include "BuildToolComponent.generated.h"
+
+class UBuildTool;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActiveToolChanged, int32, ToolIndex);
 
-UCLASS(Within = PlayerController, meta = (BlueprintSpawnableComponent))
-class BUILDTOOLSYSTEM_API UBuildToolComponent : public UActorComponent {
+UCLASS()
+class BUILDTOOLSYSTEM_API UBuildToolComponent : public UObjectSelectionComponent {
 	GENERATED_BODY()
 
 private:
@@ -16,7 +18,6 @@ private:
 protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwningController;
-
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TArray<TObjectPtr<UBuildTool>> Tools;
 
@@ -43,9 +44,9 @@ public:
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	void SetActiveToolByName(const FString name);
 
-	virtual bool OnMouseDown(const FGeometry& geometry, const FPointerEvent& event);
-	virtual bool OnMouseUp(const FGeometry& geometry, const FPointerEvent& event);
-	virtual bool OnMouseMove(const FGeometry& geometry, const FPointerEvent& event);
-	virtual bool OnMouseWheel(const FGeometry& geometry, const FPointerEvent& event);
-	virtual bool OnMouseDoubleDown(const FGeometry& geometry, const FPointerEvent& event);
+	virtual bool OnMouseDown(const FGeometry& geometry, const FPointerEvent& event) override;
+	virtual bool OnMouseUp(const FGeometry& geometry, const FPointerEvent& event) override;
+	virtual bool OnMouseMove(const FGeometry& geometry, const FPointerEvent& event) override;
+	virtual bool OnMouseWheel(const FGeometry& geometry, const FPointerEvent& event) override;
+	virtual bool OnMouseDoubleDown(const FGeometry& geometry, const FPointerEvent& event) override;
 };

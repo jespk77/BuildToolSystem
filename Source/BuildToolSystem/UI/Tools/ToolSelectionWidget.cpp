@@ -1,5 +1,5 @@
 #include "ToolSelectionWidget.h"
-#include "../Game/BuildToolComponent.h"
+#include "BuildToolSystem/Components/BuildToolComponent.h"
 
 void UToolSelectionWidget::NativeConstruct() {
 	Super::NativeConstruct();

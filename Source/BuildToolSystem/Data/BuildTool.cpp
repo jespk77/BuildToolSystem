@@ -1,4 +1,5 @@
 #include "BuildTool.h"
+#include "BuildToolSystem/TraceHitResult.h"
 
 DEFINE_LOG_CATEGORY(LogToolSystem);
 
@@ -48,6 +49,11 @@ bool UBuildTool::Raycast(FHitResults& hits, const ECollisionChannel& channel,
 	return GetWorld()->LineTraceMultiByChannel(hits, location, end, channel, queryParams, responseParams);
 }
 
+bool UBuildTool::RangeRaycast(const float radius, FHitResult& hit, const ECollisionChannel& channel, const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
+	FHitResult lineHit;
+	return RangeRaycast(radius, lineHit, hit, channel, queryParams, responseParams);
+}
+
 bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, FHitResult& hit, const ECollisionChannel& channel,
 	const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
 	if (!Raycast(lineHit, ECC_Visibility, queryParams)) return false;
@@ -67,6 +73,10 @@ bool UBuildTool::RangeRaycast(const float radius, FHitResult& lineHit, FTraceHit
 	hits.Reset(originalHits.Num());
 	hits.Append(originalHits);
 	return result;
+}
+
+bool UBuildTool::RangeRaycast(const float radius, FTraceHitRangeResult& hit, const ECollisionChannel& channel, const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
+	return RangeRaycast(radius, hit.Line, hit.Hits, channel, queryParams, responseParams);
 }
 
 #undef RAYCAST_DEBUG

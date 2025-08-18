@@ -1,5 +1,6 @@
 #include "BuildToolComponent.h"
-#include "../BuildToolSettings.h"
+#include "BuildToolSystem/Data/BuildTool.h"
+#include "BuildToolSystem/BuildToolSettings.h"
 
 void UBuildToolComponent::CreateTools() {
 	const TArray<FToolSettings>& toolTypes = GetDefault<UBuildToolSettings>()->Tools;
@@ -17,10 +18,7 @@ void UBuildToolComponent::CreateTools() {
 	}
 }
 
-UBuildToolComponent::UBuildToolComponent(const FObjectInitializer& initializer) : Super(initializer) {
-	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.bStartWithTickEnabled = false;
-}
+UBuildToolComponent::UBuildToolComponent(const FObjectInitializer& initializer) : Super(initializer) { }
 
 void UBuildToolComponent::BeginPlay() {
 	Super::BeginPlay();
@@ -31,14 +29,12 @@ void UBuildToolComponent::TickComponent(float delta, ELevelTick tick, FActorComp
 	Super::TickComponent(delta, tick, function);
 
 	if (UBuildTool* tool = GetActiveTool()) tool->Tick(delta);
-	else SetComponentTickEnabled(false);
 }
 
 void UBuildToolComponent::SetActiveTool(int32 toolIndex) {
 	int32 newIndex = Tools.IsValidIndex(toolIndex) ? toolIndex : INDEX_NONE;
 	if (newIndex == ActiveToolIndex) newIndex = INDEX_NONE;
 
-	SetComponentTickEnabled(false);
 	if (UBuildTool* tool = GetActiveTool()) {
 		UE_LOG(LogToolSystem, Log, TEXT("Deactivating tool '%s'"), *tool->ToolName.ToString());
 		tool->OnEndTool();
@@ -48,10 +44,7 @@ void UBuildToolComponent::SetActiveTool(int32 toolIndex) {
 	if (UBuildTool* tool = GetActiveTool()) {
 		UE_LOG(LogToolSystem, Log, TEXT("Activating tool '%s'"), *tool->ToolName.ToString());
 		tool->OnStartTool();
-		if (tool->TickTime >= 0) {
-			SetComponentTickInterval(tool->TickTime);
-			SetComponentTickEnabled(true);
-		}
+		if (tool->TickTime >= 0) SetComponentTickEnabled(true);
 	}
 	else UE_LOG(LogToolSystem, Log, TEXT("No tool active"));
 	OnToolChanged.Broadcast(newIndex);
@@ -72,8 +65,10 @@ void UBuildToolComponent::SetActiveToolByName(const FString name) {
 	if(UBuildTool* tool = GetActiveTool()) tool->ToolFunction(__VA_ARGS__);
 
 #define HandleEventWithReply(ToolFunction, ...)\
-	if(UBuildTool* tool = GetActiveTool()) return tool->ToolFunction(__VA_ARGS__);\
-	else return false;
+	bool result = false;\
+	if(UBuildTool* tool = GetActiveTool()) result = tool->ToolFunction(__VA_ARGS__);\
+	if(!result) result = Super::ToolFunction(__VA_ARGS__);\
+	return result;
 
 bool UBuildToolComponent::OnMouseDown(const FGeometry& geometry, const FPointerEvent& event) {
 	HandleEventWithReply(OnMouseDown, geometry, event);

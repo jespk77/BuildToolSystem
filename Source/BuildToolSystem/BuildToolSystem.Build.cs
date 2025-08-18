@@ -13,6 +13,7 @@ public class BuildToolSystem : ModuleRules {
             "Slate", "SlateCore", "UMG",
             "CommonUI", "InputCore",
             "DeveloperSettings",
+
             "WidgetUtilities",
         });
     }

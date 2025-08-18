@@ -1,11 +1,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TraceHitResult.h"
-#include "../UI/ToolPropertiesWidget.h"
+#include "BuildToolSystem/TraceHitResult.h"
+#include "BuildToolSystem/UI/Tools/ToolPropertiesWidget.h"
 #include "BuildTool.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogToolSystem, Log, Log);
+
+typedef FHitResults;
+typedef FTraceHitResults;
+struct FTraceHitRangeResult;
 
 UCLASS(Abstract, Blueprintable)
 class BUILDTOOLSYSTEM_API UBuildTool : public UObject {
@@ -14,6 +18,7 @@ class BUILDTOOLSYSTEM_API UBuildTool : public UObject {
 protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwnedController;
+
 	UPROPERTY(Category = "Events", BlueprintReadWrite)
 	bool GeneratePressedEvents = true;
 	UPROPERTY(Category = "Events", BlueprintReadWrite)
@@ -31,10 +36,7 @@ protected:
 
 	bool RangeRaycast(const float radius, FHitResult& hit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const {
-		FHitResult lineHit;
-		return RangeRaycast(radius, lineHit, hit, channel, queryParams, responseParams);
-	}
+		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
 	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResult& resultHit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
@@ -50,9 +52,7 @@ protected:
 
 	bool RangeRaycast(const float radius, FTraceHitRangeResult& hit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const {
-		return RangeRaycast(radius, hit.Line, hit.Hits, channel, queryParams, responseParams);
-	}
+		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
 	template<class ControllerType>
 	inline ControllerType* GetController() const { return Cast<ControllerType>(OwnedController); }
