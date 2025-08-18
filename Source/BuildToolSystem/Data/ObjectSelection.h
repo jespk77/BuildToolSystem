@@ -20,6 +20,7 @@ protected:
 	void InvokeObjectsUnselected();
 
 public:
+	static bool ConvertHitResult(const FHitResults& hits, TSet<UObject*>& objects);
 	static UObjectSelection* FromHitResult(const FHitResults& hits);
 	static UObjectSelection* FromSelection(const TSet<UObject*>& objects);
 

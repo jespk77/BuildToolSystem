@@ -44,14 +44,22 @@ void UObjectSelection::InvokeObjectsUnselected() {
 	}
 }
 
-UObjectSelection* UObjectSelection::FromHitResult(const FHitResults& hits) {
-	TSet<UObject*> objects;
+bool UObjectSelection::ConvertHitResult(const FHitResults& hits, TSet<UObject*>& objects) {
+	objects.Reset();
 	objects.Reserve(hits.Num());
 	for (const FHitResult& hit : hits) objects.Add(hit.GetActor());
-	return FromSelection(objects);
+	return !objects.IsEmpty();
+}
+
+UObjectSelection* UObjectSelection::FromHitResult(const FHitResults& hits) {
+	TSet<UObject*> objects;
+	if (ConvertHitResult(hits, objects)) return FromSelection(objects);
+	else return nullptr;
 }
 
 UObjectSelection* UObjectSelection::FromSelection(const TSet<UObject*>& objects) {
+	if (objects.IsEmpty()) return nullptr;
+
 	UObjectSelection* selection = NewObject<UObjectSelection>();
 	selection->SelectedObjects = objects;
 	CheckValidObjects(selection->SelectedObjects, false);

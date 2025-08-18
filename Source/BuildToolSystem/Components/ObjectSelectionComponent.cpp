@@ -5,9 +5,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-#define SELECTION_DEBUG 0
+#define SELECTION_DEBUG 1
 
-constexpr float StepDistance = 1000.f, Distance = 30000.f;
+constexpr float StepDistance = 300.f;
 
 bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const {
 	FVector startCenter, startExtents;
@@ -17,15 +17,16 @@ bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const
 
 	FVector start = startCenter;
 	const FVector direction = (endCenter - startCenter).GetSafeNormal();
-	const FQuat rotation = OwnedController->GetControlRotation().Quaternion();
 	const ECollisionChannel channel = GetDefault<UBuildToolSettings>()->SelectionTraceChannel;
+	const float totalDistance = (endCenter - startCenter).Length();
+	startExtents.Z = endExtents.Z = StepDistance / 2;
 
-	uint32 batch = 1;
-	for (float distance = 0.f; distance < Distance; distance += StepDistance) {
+	for (float distance = 0.f; distance < totalDistance; distance += StepDistance) {
 		FHitResults results;
 		const FVector end = start + (direction * StepDistance);
-		const FVector extent = FMath::Lerp(startExtents, endExtents, distance / Distance);
-		GetWorld()->SweepMultiByChannel(results, start, end, rotation, channel, FCollisionShape::MakeBox(extent));
+		const FVector extent = FMath::Lerp(startExtents, endExtents, distance / totalDistance);
+		GetWorld()->SweepMultiByChannel(results, start, end, FQuat(), channel, FCollisionShape::MakeBox(extent));
+		//UKismetSystemLibrary::BoxTraceMulti(GetOwner(), start, end, extent, FRotator::ZeroRotator, EObjectTypeQuery::ObjectTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForDuration, results, true);
 #if WITH_EDITOR && SELECTION_DEBUG
 		DrawDebugBox(GetWorld(), start, extent, FColor::Cyan, false, 5.f, 1, 1.f);
 		DrawDebugLine(GetWorld(), start, end, FColor::Cyan, false, 5.f, 1, 1.f);
@@ -41,7 +42,10 @@ void UObjectSelectionComponent::SetLocationAtDistance(FVector& locationStart, FV
 	FVector location, direction;
 	OwnedController->DeprojectMousePositionToWorld(location, direction);
 	locationStart = location;
-	locationEnd = location + (direction * distance);
+
+	FHitResult hit;
+	if (OwnedController->GetHitResultUnderCursor(ECC_Visibility, false, hit)) locationEnd = hit.Location;
+	else locationEnd = location + (direction * distance);
 }
 
 UObjectSelectionComponent::UObjectSelectionComponent(const FObjectInitializer& initializer) : Super(initializer) {
@@ -79,7 +83,7 @@ bool UObjectSelectionComponent::OnMouseDown(const FGeometry& geometry, const FPo
 	if (event.GetEffectingButton() != EKeys::LeftMouseButton) return false;
 
 	IsDragging = true;
-	SetLocationAtDistance(SelectionBoxStart.Min, SelectionBoxEnd.Min, Distance);
+	SetLocationAtDistance(SelectionBoxStart.Min, SelectionBoxEnd.Min, 10000.f);
 	SelectionBoxStart.Max = SelectionBoxStart.Min;
 	SelectionBoxEnd.Max = SelectionBoxEnd.Max;
 	return true;
@@ -91,13 +95,25 @@ bool UObjectSelectionComponent::OnMouseUp(const FGeometry& geometry, const FPoin
 	IsDragging = false;
 	FHitResults hits;
 	GetActorsInSelectionBox(hits);
-	SetSelection(UObjectSelection::FromHitResult(hits));
+
+	bool valid = IsValid(Selection);
+	if (valid && event.IsShiftDown()) {
+		TSet<UObject*> objects;
+		if (UObjectSelection::ConvertHitResult(hits, objects)) SetSelection(Selection->SelectedObjectUnion(objects));
+		else SetSelection(nullptr);
+	}
+	else if (valid && event.IsAltDown()) {
+		TSet<UObject*> objects;
+		if (UObjectSelection::ConvertHitResult(hits, objects)) SetSelection(Selection->SelectedObjectDifference(objects));
+		else SetSelection(nullptr);
+	}
+	else SetSelection(UObjectSelection::FromHitResult(hits));
 	return true;
 }
 
 bool UObjectSelectionComponent::OnMouseMove(const FGeometry& geometry, const FPointerEvent& event) {
 	if (!IsDragging) return false;
 
-	SetLocationAtDistance(SelectionBoxStart.Max, SelectionBoxEnd.Max, Distance);
+	SetLocationAtDistance(SelectionBoxStart.Max, SelectionBoxEnd.Max, 10000.f);
 	return true;
 }
