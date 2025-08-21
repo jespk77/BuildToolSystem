@@ -33,14 +33,14 @@ bool UObjectSelection::CheckValidObjects(TSet<UObject*>& objects, const bool che
 void UObjectSelection::InvokeObjectsSelected() {
 	UE_LOG(LogTemp, Log, TEXT("Invoking selected event on %d objects"), SelectedObjects.Num());
 	for (UObject* obj : SelectedObjects) {
-		if (obj->Implements<USelectableObject>()) ISelectableObject::Execute_OnObjectSelected(obj);
+		if (obj->Implements<USelectableObject>()) ISelectableObject::SelectObject(obj);
 	}
 }
 
 void UObjectSelection::InvokeObjectsUnselected() {
 	UE_LOG(LogTemp, Log, TEXT("Invoking unselected event on %d objects"), SelectedObjects.Num());
 	for (UObject* obj : SelectedObjects) {
-		if (obj->Implements<USelectableObject>()) ISelectableObject::Execute_OnObjectUnselected(obj);
+		if (obj->Implements<USelectableObject>()) ISelectableObject::UnselectObject(obj);
 	}
 }
 

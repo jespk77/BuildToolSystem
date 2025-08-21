@@ -1,9 +1,6 @@
 #include "SelectableObject.h"
 
-bool ISelectableObject::CanSelect_Implementation() const { return true; }
-
-void ISelectableObject::OnObjectSelected_Implementation() {
-	UObject* obj = _getUObject();
+void ISelectableObject::SelectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
 	UE_LOG(LogTemp, Log, TEXT("Object '%s' selected"), *obj->GetName());
@@ -13,10 +10,11 @@ void ISelectableObject::OnObjectSelected_Implementation() {
 			mesh->SetRenderCustomDepth(true);
 		}
 	}
+
+	Execute_OnObjectSelected(obj);
 }
 
-void ISelectableObject::OnObjectUnselected_Implementation() {
-	UObject* obj = _getUObject();
+void ISelectableObject::UnselectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
 	UE_LOG(LogTemp, Log, TEXT("Object '%s' unselected"), *obj->GetName());
@@ -26,4 +24,6 @@ void ISelectableObject::OnObjectUnselected_Implementation() {
 			mesh->SetCustomDepthStencilValue(0.f);
 		}
 	}
+
+	Execute_OnObjectUnselected(obj);
 }
