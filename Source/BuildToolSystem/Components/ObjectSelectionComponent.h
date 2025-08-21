@@ -38,6 +38,7 @@ public:
 	FOnSelectionChanged OnSelectionChanged;
 
 	UFUNCTION(Category = "Selection", BlueprintCallable)
+	UObjectSelection* GetSelection() { return Selection; }
 	const UObjectSelection* GetSelection() const { return Selection; }
 	UFUNCTION(Category = "Selection", BlueprintCallable)
 	void SetSelection(UObjectSelection* newSelection);

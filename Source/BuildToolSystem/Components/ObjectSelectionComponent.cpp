@@ -5,7 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-#define SELECTION_DEBUG 1
+#define SELECTION_DEBUG 0
 
 constexpr float StepDistance = 300.f;
 
@@ -117,3 +117,5 @@ bool UObjectSelectionComponent::OnMouseMove(const FGeometry& geometry, const FPo
 	SetLocationAtDistance(SelectionBoxStart.Max, SelectionBoxEnd.Max, 10000.f);
 	return true;
 }
+
+#undef SELECTION_DEBUG

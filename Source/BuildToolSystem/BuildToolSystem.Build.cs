@@ -14,6 +14,7 @@ public class BuildToolSystem : ModuleRules {
             "CommonUI", "InputCore",
             "DeveloperSettings",
 
+            "BlueprintUtilities",
             "WidgetUtilities",
         });
     }

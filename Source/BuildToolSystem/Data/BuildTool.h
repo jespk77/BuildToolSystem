@@ -64,7 +64,7 @@ public:
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
 	float TickTime = -1;
 
-	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Tools", BlueprintReadWrite)
 	TSubclassOf<UUserWidget> ToolWidget = UToolPropertiesWidgetBase::StaticClass();
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)

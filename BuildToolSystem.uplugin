@@ -26,6 +26,10 @@
             "Enabled": true
         },
         {
+            "Name": "BlueprintUtilities",
+            "Enabled": true
+        },
+        {
             "Name": "WidgetUtilities",
             "Enabled": true
         }
