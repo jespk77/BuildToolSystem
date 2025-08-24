@@ -20,7 +20,7 @@ protected:
 	virtual void NativeDestruct() override;
 
 public:
-	UFUNCTION(Category = "Events", BlueprintImplementableEvent)
+	UFUNCTION(Category = "Events", BlueprintNativeEvent)
 	void OnSelectionChanged(const UObjectSelection* selection);
 	virtual void OnSelectionChanged_Implementation(const UObjectSelection* selection);
 

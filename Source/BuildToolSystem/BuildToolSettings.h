@@ -32,4 +32,7 @@ public:
 
 	UPROPERTY(Category = "Selection", Config, EditAnywhere)
 	TEnumAsByte<ECollisionChannel> SelectionTraceChannel = ECC_Camera;
+
+	UPROPERTY(Category = "Selection", Config, EditAnywhere)
+	TSoftClassPtr<UUserWidget> GeneralObjectEditorWidget;
 };
