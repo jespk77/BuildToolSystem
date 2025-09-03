@@ -11,7 +11,7 @@ void UBuildToolComponent::CreateTools() {
 		if (!settings.IsValid()) continue;
 
 		UBuildTool* tool = NewObject<UBuildTool>(this, settings.ToolClass);
-		tool->ToolWidget = settings.ToolWidget;
+		if (!tool->ToolWidget) tool->ToolWidget = settings.ToolWidget;
 		tool->InitializeTool(GetOwner<APlayerController>());
 		UE_LOG(LogToolSystem, Log, TEXT("Created tool with name '%s'"), *tool->ToolName.ToString());
 		Tools.Add(tool);

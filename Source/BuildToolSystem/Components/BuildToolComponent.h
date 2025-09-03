@@ -18,7 +18,7 @@ private:
 protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwningController;
-	UPROPERTY(Category = "References", BlueprintReadOnly)
+	UPROPERTY(Category = "References", VisibleInstanceOnly, BlueprintReadOnly, meta=(EditInline))
 	TArray<TObjectPtr<UBuildTool>> Tools;
 
 	UPROPERTY(Category = "Tools", VisibleInstanceOnly, BlueprintReadOnly)
@@ -31,6 +31,10 @@ public:
 
 	UPROPERTY(Category = "Tools", BlueprintAssignable)
 	FOnActiveToolChanged OnToolChanged;
+
+	UFUNCTION(Category = "Tools", BlueprintCallable)
+	const TArray<UBuildTool*>& GetTools() const { return Tools; }
+	TArray<TObjectPtr<UBuildTool>>::TConstIterator GetToolIterator() const { return Tools; }
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	bool HasActiveTool() const { return Tools.IsValidIndex(ActiveToolIndex); }

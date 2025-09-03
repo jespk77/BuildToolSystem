@@ -22,15 +22,11 @@
     ],
     "Plugins": [
         {
-            "Name": "CommonUI",
-            "Enabled": true
-        },
-        {
             "Name": "BlueprintUtilities",
             "Enabled": true
         },
         {
-            "Name": "WidgetUtilities",
+            "Name": "CoreGameUI",
             "Enabled": true
         }
     ]

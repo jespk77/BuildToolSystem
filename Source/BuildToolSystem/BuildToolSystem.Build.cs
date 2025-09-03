@@ -11,11 +11,11 @@ public class BuildToolSystem : ModuleRules {
         PrivateDependencyModuleNames.AddRange(new string[] {
             "CoreUObject", "Engine",
             "Slate", "SlateCore", "UMG",
-            "CommonUI", "InputCore",
+            "InputCore",
             "DeveloperSettings",
 
             "BlueprintUtilities",
-            "WidgetUtilities",
+            "CoreGameUI",
         });
     }
 }

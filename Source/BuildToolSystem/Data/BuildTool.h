@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "BuildToolSystem/TraceHitResult.h"
-#include "BuildToolSystem/UI/Tools/ToolPropertiesWidget.h"
 #include "BuildTool.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogToolSystem, Log, Log);
@@ -10,6 +9,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogToolSystem, Log, Log);
 typedef FHitResults;
 typedef FTraceHitResults;
 struct FTraceHitRangeResult;
+class UToolPropertiesEditorWidget;
 
 UCLASS(Abstract, Blueprintable)
 class BUILDTOOLSYSTEM_API UBuildTool : public UObject {
@@ -61,11 +61,13 @@ public:
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
 	FName ToolName = NAME_None;
 
+	// The minimum time between ticks, when time < 0 the tool does not receive ticks (which is better for performance)
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
 	float TickTime = -1;
 
+	// Normally gets set during construction by the BuildToolComponent, but can be overridden directly
 	UPROPERTY(Category = "Tools", BlueprintReadWrite)
-	TSubclassOf<UUserWidget> ToolWidget = UToolPropertiesWidgetBase::StaticClass();
+	TSubclassOf<UToolPropertiesEditorWidget> ToolWidget;
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void OnStartTool() { }
