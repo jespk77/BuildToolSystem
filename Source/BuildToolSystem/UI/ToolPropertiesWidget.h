@@ -22,6 +22,8 @@ public:
 	virtual void InitializeTool(UBuildTool* newTool);
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 UCLASS(NotBlueprintable)
 class BUILDTOOLSYSTEM_API UToolPropertiesWidget : public UUserWidget {
 	GENERATED_BODY()

@@ -28,6 +28,8 @@ public:
 	const TSet<UObject*>& GetSelectedObjects() const { return SelectedObjects; }
 	TSet<UObject*>::TConstIterator GetObjectIterator() const { return SelectedObjects.CreateConstIterator(); }
 	UFUNCTION(Category = "Objects", BlueprintCallable)
+	void GetSelectedObjectsArray(TArray<UObject*>& objects) const;
+	UFUNCTION(Category = "Objects", BlueprintCallable)
 	int32 GetObjectCount() const { return SelectedObjects.Num(); }
 	UFUNCTION(Category = "Objects", BlueprintCallable)
 	bool IsEmpty() const { return SelectedObjects.IsEmpty(); }

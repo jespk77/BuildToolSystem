@@ -3,7 +3,7 @@
 #include "Blueprint/UserWidget.h"
 #include "ToolSelectionWidget.generated.h"
 
-UCLASS()
+UCLASS(NotBlueprintable)
 class BUILDTOOLSYSTEM_API UToolSelectionWidget : public UUserWidget {
 	GENERATED_BODY()
 

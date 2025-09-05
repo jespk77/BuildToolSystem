@@ -5,7 +5,7 @@
 
 class UBuildToolComponent;
 
-UCLASS()
+UCLASS(NotBlueprintable)
 class BUILDTOOLSYSTEM_API UToolInteractionWidget : public UUserWidget {
 	GENERATED_BODY()
 

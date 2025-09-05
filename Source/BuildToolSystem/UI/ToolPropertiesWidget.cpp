@@ -63,17 +63,16 @@ void UToolPropertiesWidget::NativePreConstruct() {
 
 	if (!IsDesignTime()) {
 		ToolComponent = GetOwningPlayer() ? GetOwningPlayer()->GetComponentByClass<UBuildToolComponent>() : nullptr;
-		if (IsValid(ToolComponent))
-			ToolComponent->OnToolChanged.AddDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
-		SetVisibility(ESlateVisibility::Collapsed);
+		if (IsValid(ToolComponent)) ToolComponent->OnToolChanged.AddDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
+		else UE_LOG(LogTemp, Warning, TEXT("UToolPropertiesWidget: No BuildToolComponent found on PlayerController"));
 	}
+
+	SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UToolPropertiesWidget::NativeDestruct() {
 	Super::NativeDestruct();
 
-	if (IsValid(ToolComponent)) {
-		ToolComponent->OnToolChanged.RemoveDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
-		ToolComponent = nullptr;
-	}
+	if (IsValid(ToolComponent)) ToolComponent->OnToolChanged.RemoveDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
+	ToolComponent = nullptr;
 }

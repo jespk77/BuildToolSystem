@@ -66,6 +66,11 @@ UObjectSelection* UObjectSelection::FromSelection(const TSet<UObject*>& objects)
 	return selection;
 }
 
+void UObjectSelection::GetSelectedObjectsArray(TArray<UObject*>& objects) const {
+	objects.Reset(GetObjectCount());
+	for (UObject* obj : SelectedObjects) objects.Add(obj);
+}
+
 UObjectSelection* UObjectSelection::ClearSelectedObjects(int32 size) const {
 	TSet<UObject*> objects;
 	if (size > 0) objects.Reserve(size);
