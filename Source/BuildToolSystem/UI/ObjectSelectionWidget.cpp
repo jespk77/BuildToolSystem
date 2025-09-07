@@ -20,6 +20,7 @@ void USelectionEditorWidget::InitializeSelection(UObjectSelection* newSelection)
 			IPropertyObjectEditor::Execute_SetObjects(widget, SelectedObjects);
 		}
 	}
+	SelectionUpdated();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

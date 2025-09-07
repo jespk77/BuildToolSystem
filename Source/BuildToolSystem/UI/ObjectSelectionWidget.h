@@ -20,6 +20,9 @@ protected:
 public:
 	UFUNCTION(Category = "Selection", BlueprintCallable)
 	virtual void InitializeSelection(UObjectSelection* newSelection);
+
+	UFUNCTION(Category= "Selection", BlueprintImplementableEvent)
+	void SelectionUpdated();
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

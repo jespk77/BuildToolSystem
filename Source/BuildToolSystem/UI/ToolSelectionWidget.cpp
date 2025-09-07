@@ -3,6 +3,14 @@
 #include "BuildToolSystem/Components/BuildToolComponent.h"
 #include "BuildToolSystem/Data/BuildTool.h"
 
+void UToolSelectionWidget::OnToolsInitialized() {
+	if (IsValid(ToolComponent)) {
+		for (auto it = ToolComponent->GetToolIterator(); it; ++it)
+			AddToolButton((*it)->ToolName);
+		ToolComponent->OnToolChanged.AddDynamic(this, &UToolSelectionWidget::OnActiveToolChanged);
+	}
+}
+
 void UToolSelectionWidget::OnActiveToolChanged(int32 index) {
 	for (int32 i = 0; i < Buttons.Num(); i++)
 		Buttons[i]->SetSelected(i == index);
@@ -48,11 +56,11 @@ void UToolSelectionWidget::NativePreConstruct() {
 	}
 	else {
 		ToolComponent = GetOwningPlayer() ? GetOwningPlayer()->GetComponentByClass<UBuildToolComponent>() : nullptr;
-		if (IsValid(ToolComponent)) {
-			for (auto it = ToolComponent->GetToolIterator(); it; ++it)
-				AddToolButton((*it)->ToolName);
-			ToolComponent->OnToolChanged.AddDynamic(this, &UToolSelectionWidget::OnActiveToolChanged);
-		}
+#if WITH_EDITOR
+		OnToolsInitialized();
+#else
+		if (IsValid(ToolComponent)) ToolComponent->OnToolsInitialized.AddDynamic(this, &UToolSelectionWidget::OnToolsInitialized);
+#endif
 	}
 }
 
@@ -60,6 +68,7 @@ void UToolSelectionWidget::NativeDestruct() {
 	Super::NativeDestruct();
 
 	if (IsValid(ToolComponent)) {
+		ToolComponent->OnToolsInitialized.RemoveDynamic(this, &UToolSelectionWidget::OnToolsInitialized);
 		ToolComponent->OnToolChanged.RemoveDynamic(this, &UToolSelectionWidget::OnActiveToolChanged);
 		ToolComponent = nullptr;
 	}

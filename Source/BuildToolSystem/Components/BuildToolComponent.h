@@ -5,7 +5,9 @@
 #include "BuildToolComponent.generated.h"
 
 class UBuildTool;
+class UToolData;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnToolsInitialized);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActiveToolChanged, int32, ToolIndex);
 
 UCLASS()
@@ -18,7 +20,7 @@ private:
 protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwningController;
-	UPROPERTY(Category = "References", VisibleInstanceOnly, BlueprintReadOnly, meta=(EditInline))
+	UPROPERTY(Category = "References", VisibleInstanceOnly, BlueprintReadOnly, meta = (EditInline))
 	TArray<TObjectPtr<UBuildTool>> Tools;
 
 	UPROPERTY(Category = "Tools", VisibleInstanceOnly, BlueprintReadOnly)
@@ -29,6 +31,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;
 
+	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UToolData> ToolData;
+
+	UPROPERTY(Category = "Tools", BlueprintAssignable)
+	FOnToolsInitialized OnToolsInitialized;
 	UPROPERTY(Category = "Tools", BlueprintAssignable)
 	FOnActiveToolChanged OnToolChanged;
 

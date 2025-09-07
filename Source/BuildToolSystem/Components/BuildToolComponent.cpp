@@ -1,9 +1,10 @@
 #include "BuildToolComponent.h"
 #include "BuildToolSystem/Data/BuildTool.h"
+#include "BuildToolSystem/Data/ToolData.h"
 #include "BuildToolSystem/BuildToolSettings.h"
 
 void UBuildToolComponent::CreateTools() {
-	const TArray<FToolSettings>& toolTypes = GetDefault<UBuildToolSettings>()->Tools;
+	const TArray<FToolSettings>& toolTypes = ToolData->Tools;
 	UE_LOG(LogToolSystem, Log, TEXT("Found and creating custom %d tool classes..."), toolTypes.Num());
 
 	Tools.Reset(toolTypes.Num());
@@ -16,6 +17,8 @@ void UBuildToolComponent::CreateTools() {
 		UE_LOG(LogToolSystem, Log, TEXT("Created tool with name '%s'"), *tool->ToolName.ToString());
 		Tools.Add(tool);
 	}
+
+	OnToolsInitialized.Broadcast();
 }
 
 UBuildToolComponent::UBuildToolComponent(const FObjectInitializer& initializer) : Super(initializer) { }

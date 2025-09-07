@@ -8,6 +8,7 @@ class BUILDTOOLSYSTEM_API UToolSelectionWidget : public UUserWidget {
 	GENERATED_BODY()
 
 private:
+	UFUNCTION() void OnToolsInitialized();
 	UFUNCTION() void OnActiveToolChanged(int32 index);
 
 protected:
