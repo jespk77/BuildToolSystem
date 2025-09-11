@@ -2,13 +2,11 @@
 
 #define LOCTEXT_NAMESPACE "FBuildToolSystemModule"
 
-void FBuildToolSystemModule::StartupModule() {
+DEFINE_LOG_CATEGORY(LogToolSystem);
 
-}
+void FBuildToolSystemModule::StartupModule() { }
 
-void FBuildToolSystemModule::ShutdownModule() {
-
-}
+void FBuildToolSystemModule::ShutdownModule() { }
 
 #undef LOCTEXT_NAMESPACE
 

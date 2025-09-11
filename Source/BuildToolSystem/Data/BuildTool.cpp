@@ -1,7 +1,6 @@
 #include "BuildTool.h"
 #include "BuildToolSystem/TraceHitResult.h"
-
-DEFINE_LOG_CATEGORY(LogToolSystem);
+#include "BuildToolSystem/BuildToolSystem.h"
 
 #define RAYCAST_DEBUG 0
 
@@ -17,10 +16,7 @@ bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 	}
 
 	FVector location, direction;
-	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) {
-		//UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
-		return false;
-	}
+	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) return false;
 
 	const FVector end = location + (direction * OwnedController->HitResultTraceDistance);
 #if RAYCAST_DEBUG
@@ -37,10 +33,7 @@ bool UBuildTool::Raycast(FHitResults& hits, const ECollisionChannel& channel,
 	}
 
 	FVector location, direction;
-	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) {
-		//UE_LOG(LogToolSystem, Error, TEXT("Failed to deproject mouse position, tool raycast cannot execute"));
-		return false;
-	}
+	if (!OwnedController->DeprojectMousePositionToWorld(location, direction)) return false;
 
 	const FVector end = location + (direction * OwnedController->HitResultTraceDistance);
 #if RAYCAST_DEBUG

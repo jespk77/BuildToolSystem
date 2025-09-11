@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "ObjectSelectionComponent.h"
 #include "BuildToolComponent.generated.h"
 
@@ -27,7 +26,6 @@ protected:
 	int32 ActiveToolIndex = INDEX_NONE;
 
 public:
-	UBuildToolComponent(const FObjectInitializer& initializer = FObjectInitializer::Get());
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;
 

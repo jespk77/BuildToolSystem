@@ -1,6 +1,5 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "TraceHitResult.generated.h"
 
 typedef TArray<FHitResult> FHitResults;

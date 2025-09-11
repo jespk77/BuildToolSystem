@@ -1,7 +1,7 @@
 #include "BuildToolComponent.h"
 #include "BuildToolSystem/Data/BuildTool.h"
 #include "BuildToolSystem/Data/ToolData.h"
-#include "BuildToolSystem/BuildToolSettings.h"
+#include "BuildToolSystem/BuildToolSystem.h"
 
 void UBuildToolComponent::CreateTools() {
 	const TArray<FToolSettings>& toolTypes = ToolData->Tools;
@@ -20,8 +20,6 @@ void UBuildToolComponent::CreateTools() {
 
 	OnToolsInitialized.Broadcast();
 }
-
-UBuildToolComponent::UBuildToolComponent(const FObjectInitializer& initializer) : Super(initializer) { }
 
 void UBuildToolComponent::BeginPlay() {
 	Super::BeginPlay();

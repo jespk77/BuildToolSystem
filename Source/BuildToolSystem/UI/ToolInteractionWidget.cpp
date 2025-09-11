@@ -22,17 +22,14 @@ void UToolInteractionWidget::NativeDestruct() {
 }
 
 FReply UToolInteractionWidget::NativeOnKeyChar(const FGeometry& geometry, const FCharacterEvent& event) {
-	UE_LOG(LogTemp, Log, TEXT("NativeOnKeyChar %c"), event.GetCharacter());
 	return Super::NativeOnKeyChar(geometry, event);
 }
 
 FReply UToolInteractionWidget::NativeOnKeyDown(const FGeometry& geometry, const FKeyEvent& event) {
-	UE_LOG(LogTemp, Log, TEXT("NativeOnKeyDown %c"), event.GetCharacter());
 	return Super::NativeOnKeyDown(geometry, event);
 }
 
 FReply UToolInteractionWidget::NativeOnKeyUp(const FGeometry& geometry, const FKeyEvent& event) {
-	UE_LOG(LogTemp, Log, TEXT("NativeOnKeyUp %c"), event.GetCharacter());
 	return Super::NativeOnKeyUp(geometry, event);
 }
 

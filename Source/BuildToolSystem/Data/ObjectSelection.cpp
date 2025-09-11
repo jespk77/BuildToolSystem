@@ -1,5 +1,6 @@
 #include "ObjectSelection.h"
 #include "SelectableObject.h"
+#include "BuildToolSystem/BuildToolSystem.h"
 
 bool UObjectSelection::CheckValidObjects(TSet<UObject*>& objects, const bool checkInterface, const bool checkCompatible) {
 	UClass* objectClass = nullptr;
@@ -8,7 +9,7 @@ bool UObjectSelection::CheckValidObjects(TSet<UObject*>& objects, const bool che
 		if (IsValid(obj)) {
 			if (checkInterface) {
 				if (!obj->Implements<USelectableObject>() || !ISelectableObject::Execute_CanSelect(obj)) {
-					UE_LOG(LogTemp, Log, TEXT("BuildTool: Object '%s' either does not implement ISelectableObject or cannot be selected"), *obj->GetName());
+					UE_LOG(LogToolSystem, Log, TEXT("BuildTool: Object '%s' either does not implement ISelectableObject or cannot be selected"), *obj->GetName());
 					it.RemoveCurrent();
 					continue;
 				}
@@ -18,7 +19,7 @@ bool UObjectSelection::CheckValidObjects(TSet<UObject*>& objects, const bool che
 				UClass* otherClass = obj->GetClass();
 				if (!objectClass) objectClass = otherClass;
 				else if (!objectClass->IsChildOf(otherClass) && !otherClass->IsChildOf(objectClass)) {
-					UE_LOG(LogTemp, Log, TEXT("BuildTool: Object types '%s' and '%s' are not compatible"), *otherClass->GetName(), *objectClass->GetName());
+					UE_LOG(LogToolSystem, Log, TEXT("BuildTool: Object types '%s' and '%s' are not compatible"), *otherClass->GetName(), *objectClass->GetName());
 					it.RemoveCurrent();
 					continue;
 				}
@@ -31,14 +32,14 @@ bool UObjectSelection::CheckValidObjects(TSet<UObject*>& objects, const bool che
 }
 
 void UObjectSelection::InvokeObjectsSelected() {
-	UE_LOG(LogTemp, Log, TEXT("Invoking selected event on %d objects"), SelectedObjects.Num());
+	UE_LOG(LogToolSystem, Log, TEXT("Invoking selected event on %d objects"), SelectedObjects.Num());
 	for (UObject* obj : SelectedObjects) {
 		if (obj->Implements<USelectableObject>()) ISelectableObject::SelectObject(obj);
 	}
 }
 
 void UObjectSelection::InvokeObjectsUnselected() {
-	UE_LOG(LogTemp, Log, TEXT("Invoking unselected event on %d objects"), SelectedObjects.Num());
+	UE_LOG(LogToolSystem, Log, TEXT("Invoking unselected event on %d objects"), SelectedObjects.Num());
 	for (UObject* obj : SelectedObjects) {
 		if (obj->Implements<USelectableObject>()) ISelectableObject::UnselectObject(obj);
 	}

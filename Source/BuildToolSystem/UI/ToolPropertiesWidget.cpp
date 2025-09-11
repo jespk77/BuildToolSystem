@@ -2,8 +2,8 @@
 #include "Blueprint/WidgetTree.h"
 #include "BuildToolSystem/Components/BuildToolComponent.h"
 #include "BuildToolSystem/Data/BuildTool.h"
-#include "CoreGameUI/Widgets/ObjectEditorWidget.h"
 #include "CoreGameUI/Widgets/PropertyWidgets.h"
+#include "BuildToolSystem/BuildToolSystem.h"
 
 void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {
 	ensureAlways(newTool);
@@ -28,11 +28,6 @@ void UToolPropertiesWidget::OnActiveToolChanged(int32 index) {
 			widget->InitializeTool(tool);
 			toolWidget = widget;
 		}
-		/*else {
-			UObjectEditorWidget* widget = CreateWidget<UObjectEditorWidget>(this);
-			widget->SetObject(tool);
-			toolWidget = widget;
-		}*/
 	}
 
 	if (IsValid(EditorWidget)) EditorWidget->MarkAsGarbage();
@@ -64,7 +59,7 @@ void UToolPropertiesWidget::NativePreConstruct() {
 	if (!IsDesignTime()) {
 		ToolComponent = GetOwningPlayer() ? GetOwningPlayer()->GetComponentByClass<UBuildToolComponent>() : nullptr;
 		if (IsValid(ToolComponent)) ToolComponent->OnToolChanged.AddDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
-		else UE_LOG(LogTemp, Warning, TEXT("UToolPropertiesWidget: No BuildToolComponent found on PlayerController"));
+		else UE_LOG(LogToolSystem, Warning, TEXT("UToolPropertiesWidget: No BuildToolComponent found on PlayerController"));
 	}
 
 	SetVisibility(ESlateVisibility::Collapsed);

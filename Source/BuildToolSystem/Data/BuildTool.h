@@ -1,10 +1,7 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "BuildToolSystem/TraceHitResult.h"
 #include "BuildTool.generated.h"
-
-DECLARE_LOG_CATEGORY_EXTERN(LogToolSystem, Log, Log);
 
 typedef FHitResults;
 typedef FTraceHitResults;

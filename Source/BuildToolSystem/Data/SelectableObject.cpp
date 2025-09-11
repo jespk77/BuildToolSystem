@@ -1,9 +1,10 @@
 #include "SelectableObject.h"
+#include "BuildToolSystem/BuildToolSystem.h"
 
 void ISelectableObject::SelectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
-	UE_LOG(LogTemp, Log, TEXT("Object '%s' selected"), *obj->GetName());
+	UE_LOG(LogToolSystem, Log, TEXT("Object '%s' selected"), *obj->GetName());
 	if (AActor* actor = Cast<AActor>(obj)) {
 		if (UMeshComponent* mesh = actor->GetComponentByClass<UMeshComponent>()) {
 			mesh->SetCustomDepthStencilValue(255.f);
@@ -17,7 +18,7 @@ void ISelectableObject::SelectObject(UObject* obj) {
 void ISelectableObject::UnselectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
-	UE_LOG(LogTemp, Log, TEXT("Object '%s' unselected"), *obj->GetName());
+	UE_LOG(LogToolSystem, Log, TEXT("Object '%s' unselected"), *obj->GetName());
 	if (AActor* actor = Cast<AActor>(obj)) {
 		if (UMeshComponent* mesh = actor->GetComponentByClass<UMeshComponent>()) {
 			mesh->SetRenderCustomDepth(false);

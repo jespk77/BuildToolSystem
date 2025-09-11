@@ -2,8 +2,6 @@
 #include "BuildToolSystem/Data/ObjectSelection.h"
 #include "BuildToolSystem/Data/SelectableObject.h"
 #include "BuildToolSystem/BuildToolSettings.h"
-#include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 #define SELECTION_DEBUG 0
 
@@ -26,7 +24,6 @@ bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const
 		const FVector end = start + (direction * StepDistance);
 		const FVector extent = FMath::Lerp(startExtents, endExtents, distance / totalDistance);
 		GetWorld()->SweepMultiByChannel(results, start, end, FQuat(), channel, FCollisionShape::MakeBox(extent));
-		//UKismetSystemLibrary::BoxTraceMulti(GetOwner(), start, end, extent, FRotator::ZeroRotator, EObjectTypeQuery::ObjectTypeQuery1, false, TArray<AActor*>(), EDrawDebugTrace::ForDuration, results, true);
 #if WITH_EDITOR && SELECTION_DEBUG
 		DrawDebugBox(GetWorld(), start, extent, FColor::Cyan, false, 5.f, 1, 1.f);
 		DrawDebugLine(GetWorld(), start, end, FColor::Cyan, false, 5.f, 1, 1.f);
