@@ -48,4 +48,6 @@ public:
 	UFUNCTION(Category = "Objects", BlueprintCallable)
 	UObjectSelection* SetSelectedObjects(TSet<UObject*>& objects) const;
 	UObjectSelection* SetSelectedObjects(TArray<UObject*>& objects) const { TSet<UObject*> newSet(objects); return SetSelectedObjects(newSet); }
+
+	bool operator==(const UObjectSelection* other) const;
 };

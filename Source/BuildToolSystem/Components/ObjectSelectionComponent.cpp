@@ -67,7 +67,7 @@ void UObjectSelectionComponent::TickComponent(float delta, ELevelTick tick, FAct
 }
 
 void UObjectSelectionComponent::SetSelection(UObjectSelection* newSelection) {
-	if (Selection == newSelection) return;
+	if (*Selection == newSelection) return;
 
 	if (IsValid(Selection)) Selection->InvokeObjectsUnselected();
 	Selection = newSelection;

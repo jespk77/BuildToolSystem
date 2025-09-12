@@ -94,3 +94,9 @@ UObjectSelection* UObjectSelection::SetSelectedObjects(TSet<UObject*>& objects) 
 	if (!CheckValidObjects(objects)) return nullptr;
 	return FromSelection(objects);
 }
+
+bool UObjectSelection::operator==(const UObjectSelection* other) const {
+	const bool thisValid = IsValid(this), otherValid = IsValid(other);
+	if (!thisValid || !otherValid) return thisValid == otherValid;
+	return SelectedObjects.Difference(other->SelectedObjects).IsEmpty();
+}
