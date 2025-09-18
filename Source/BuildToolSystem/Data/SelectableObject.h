@@ -12,6 +12,9 @@ class BUILDTOOLSYSTEM_API ISelectableObject {
 
 	friend class UObjectSelection;
 
+private:
+	static UMeshComponent* FindBestMeshComponent(AActor* actor);
+
 protected:
 	static void SelectObject(UObject* obj);
 	static void UnselectObject(UObject* obj);
@@ -19,13 +22,14 @@ protected:
 public:
 	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	bool CanSelect() const;
+	virtual bool CanSelect_Implementation() const { return true; }
 
-	UFUNCTION(Category = "Interface", BlueprintNativeEvent)
+	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	void ObjectSelectedTick() const;
 
-	UFUNCTION(Category = "Interface", BlueprintNativeEvent)
+	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	void OnObjectSelected();
-	UFUNCTION(Category = "Interface", BlueprintNativeEvent)
+	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	void OnObjectUnselected();
 
 	UFUNCTION(Category = "Interface", BlueprintNativeEvent)
