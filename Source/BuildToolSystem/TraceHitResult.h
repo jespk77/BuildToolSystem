@@ -44,6 +44,15 @@ public:
 		Hits.Reset();
 	}
 
+	FVector GetLocation() const { return Line.Location; }
+	FVector GetNormal() const { return Line.Normal; }
+	float GetDistance() const { return Line.Distance; }
+
+	/* Goes through all hits and find the first one that hit an actor of given class */
+	template<class ActorClass>
+	ActorClass* GetFirstRangedHitActor() const { return GetFirstRangedHitActor<ActorClass>(*this); }
+
+	/* Goes through all hits and find the first one that hit an actor of given class */
 	template<class ActorClass>
 	static ActorClass* GetFirstRangedHitActor(const FTraceHitRangeResult& hits) {
 		for (const FTraceHitResult& hit : hits.Hits) {
@@ -54,6 +63,11 @@ public:
 		return nullptr;
 	}
 
+	/* Goes through all hits and find the first one that hit a component of given class */
+	template<class ComponentClass>
+	ComponentClass* GetFirstRangedHitComponent() const { return GetFirstRangedHitComponent<ComponentClass>(*this); }
+
+	/* Goes through all hits and find the first one that hit a component of given class */
 	template<class ComponentClass>
 	static ComponentClass* GetFirstRangedHitComponent(const FTraceHitRangeResult& hits) {
 		for (const FTraceHitResult& hit : hits.Hits) {
