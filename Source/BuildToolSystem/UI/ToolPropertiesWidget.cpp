@@ -12,8 +12,8 @@ void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {
 	TArray<UWidget*> widgets;
 	WidgetTree->GetAllWidgets(widgets);
 	for (UWidget* widget : widgets) {
-		if (widget->Implements<UPropertyObjectEditor>())
-			IPropertyObjectEditor::Execute_SetObject(widget, Tool);
+		if (IPropertyObjectEditor* editor = Cast<IPropertyObjectEditor>(widget))
+			editor->SetObjectWithType(Tool->GetClass(), Tool.Get());
 	}
 }
 

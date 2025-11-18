@@ -16,8 +16,8 @@ void USelectionEditorWidget::InitializeSelection(UObjectSelection* newSelection)
 	WidgetTree->GetAllWidgets(widgets);
 
 	for (UWidget* widget : widgets) {
-		if (widget->Implements<UPropertyObjectEditor>()) {
-			IPropertyObjectEditor::Execute_SetObjects(widget, SelectedObjects);
+		if (IPropertyObjectEditor* editor = Cast<IPropertyObjectEditor>(widget)) {
+			editor->SetObjectWithType(UClassUtilities::GetCommonClassFromArray(SelectedObjects), SelectedObjects.GetData()[0]);
 		}
 	}
 	SelectionUpdated();
