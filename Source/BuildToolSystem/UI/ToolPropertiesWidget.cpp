@@ -1,20 +1,12 @@
 #include "ToolPropertiesWidget.h"
-#include "Blueprint/WidgetTree.h"
 #include "BuildToolSystem/Components/BuildToolComponent.h"
 #include "BuildToolSystem/Data/BuildTool.h"
-#include "CoreGameUI/Widgets/PropertyWidgets.h"
 #include "BuildToolSystem/BuildToolSystem.h"
 
 void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {
 	ensureAlways(newTool);
 	Tool = newTool;
-
-	TArray<UWidget*> widgets;
-	WidgetTree->GetAllWidgets(widgets);
-	for (UWidget* widget : widgets) {
-		if (IPropertyObjectEditor* editor = Cast<IPropertyObjectEditor>(widget))
-			editor->SetObjectWithType(Tool->GetClass(), Tool.Get());
-	}
+	IPropertyWidgetContainer::Execute_SetObjectOnPropertyWidgets(this, Tool);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

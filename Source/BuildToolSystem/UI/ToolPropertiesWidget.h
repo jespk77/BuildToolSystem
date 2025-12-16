@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
+#include "CoreGameUI/Widgets/PropertyWidgetContainer.h"
 #include "ToolPropertiesWidget.generated.h"
 
 class UBuildTool;
 class UBuildToolComponent;
 
 UCLASS(Abstract)
-class BUILDTOOLSYSTEM_API UToolPropertiesEditorWidget : public UUserWidget {
+class BUILDTOOLSYSTEM_API UToolPropertiesEditorWidget : public UUserWidget, public IPropertyWidgetContainer {
 	GENERATED_BODY()
 
 protected:

@@ -1,25 +1,15 @@
 #include "ObjectSelectionWidget.h"
-#include "Blueprint/WidgetTree.h"
 #include "BuildToolSystem/Components/ObjectSelectionComponent.h"
 #include "BuildToolSystem/Data/ObjectSelection.h"
 #include "BuildToolSystem/Data/SelectableObject.h"
-#include "CoreGameUI/Widgets/PropertyWidgets.h"
-#include "BlueprintUtilities/BlueprintFunctionLibrary/ClassUtilities.h"
 #include "BuildToolSystem/BuildToolSystem.h"
+#include "BlueprintUtilities/BlueprintFunctionLibrary/ClassUtilities.h"
 
 void USelectionEditorWidget::InitializeSelection(UObjectSelection* newSelection) {
 	ensureAlways(newSelection);
 	Selection = newSelection;
 	Selection->GetSelectedObjectsArray(SelectedObjects);
-
-	TArray<UWidget*> widgets;
-	WidgetTree->GetAllWidgets(widgets);
-
-	for (UWidget* widget : widgets) {
-		if (IPropertyObjectEditor* editor = Cast<IPropertyObjectEditor>(widget)) {
-			editor->SetObjectWithType(UClassUtilities::GetCommonClassFromArray(SelectedObjects), SelectedObjects.GetData()[0]);
-		}
-	}
+	IPropertyWidgetContainer::Execute_SetObjectsOnPropertyWidgets(this, SelectedObjects);
 	SelectionUpdated();
 }
 

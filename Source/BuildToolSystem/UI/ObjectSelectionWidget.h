@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Blueprint/UserWidget.h"
+#include "CoreGameUI/Widgets/PropertyWidgetContainer.h"
 #include "ObjectSelectionWidget.generated.h"
 
 class UObjectSelection;
 class UObjectSelectionComponent;
 
 UCLASS()
-class BUILDTOOLSYSTEM_API USelectionEditorWidget : public UUserWidget {
+class BUILDTOOLSYSTEM_API USelectionEditorWidget : public UUserWidget, public IPropertyWidgetContainer {
 	GENERATED_BODY()
 
 protected:
@@ -21,7 +22,7 @@ public:
 	UFUNCTION(Category = "Selection", BlueprintCallable)
 	virtual void InitializeSelection(UObjectSelection* newSelection);
 
-	UFUNCTION(Category= "Selection", BlueprintImplementableEvent)
+	UFUNCTION(Category = "Selection", BlueprintImplementableEvent)
 	void SelectionUpdated();
 };
 
