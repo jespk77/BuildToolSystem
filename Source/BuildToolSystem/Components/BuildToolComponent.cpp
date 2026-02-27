@@ -4,7 +4,8 @@
 #include "BuildToolSystem/BuildToolSystem.h"
 
 void UBuildToolComponent::CreateTools() {
-	const TArray<FToolSettings>& toolTypes = ToolData->Tools;
+	TArray<FToolSettings> toolTypes;
+	if (ToolData) ToolData->GetTools(toolTypes);
 	UE_LOG(LogToolSystem, Log, TEXT("Found and creating custom %d tool classes..."), toolTypes.Num());
 
 	Tools.Reset(toolTypes.Num());
