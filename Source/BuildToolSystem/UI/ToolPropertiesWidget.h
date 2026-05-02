@@ -45,4 +45,7 @@ protected:
 	virtual void ReleaseSlateResources(bool releaseChildren) override;
 	virtual void NativePreConstruct() override;
 	virtual void NativeDestruct() override;
+
+	virtual FReply NativeOnMouseButtonDown(const FGeometry& geometry, const FPointerEvent& event) { return FReply::Handled(); }
+	virtual FReply NativeOnMouseWheel(const FGeometry& geometry, const FPointerEvent& event) { return FReply::Handled(); }
 };
