@@ -25,6 +25,9 @@ protected:
 	UPROPERTY(Category = "Tools", VisibleInstanceOnly, BlueprintReadOnly)
 	int32 ActiveToolIndex = INDEX_NONE;
 
+	virtual void ProcessSelectionChanged() override;
+	virtual void ProcessToolChanged();
+
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;

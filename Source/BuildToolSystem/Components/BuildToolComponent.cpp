@@ -22,6 +22,20 @@ void UBuildToolComponent::CreateTools() {
 	OnToolsInitialized.Broadcast();
 }
 
+void UBuildToolComponent::ProcessSelectionChanged() {
+	Super::ProcessSelectionChanged();
+
+	if (UBuildTool* tool = GetActiveTool()) {
+		const bool supportSelection = tool->OnSelectionChanged(Selection);
+		if (Selection && !supportSelection) SetActiveTool(INDEX_NONE);
+	}
+}
+
+void UBuildToolComponent::ProcessToolChanged() {
+	OnToolChanged.Broadcast(ActiveToolIndex);
+	if (HasActiveTool()) SetSelection(nullptr);
+}
+
 void UBuildToolComponent::BeginPlay() {
 	Super::BeginPlay();
 	CreateTools();
@@ -49,7 +63,7 @@ void UBuildToolComponent::SetActiveTool(int32 toolIndex) {
 		if (tool->TickTime >= 0) SetComponentTickEnabled(true);
 	}
 	else UE_LOG(LogToolSystem, Log, TEXT("No tool active"));
-	OnToolChanged.Broadcast(newIndex);
+	ProcessToolChanged();
 }
 
 void UBuildToolComponent::SetActiveToolByName(const FString name) {

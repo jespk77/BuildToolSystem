@@ -45,6 +45,10 @@ void UObjectSelectionComponent::SetLocationAtDistance(FVector& locationStart, FV
 	else locationEnd = location + (direction * distance);
 }
 
+void UObjectSelectionComponent::ProcessSelectionChanged() {
+	OnSelectionChanged.Broadcast(Selection);
+}
+
 UObjectSelectionComponent::UObjectSelectionComponent(const FObjectInitializer& initializer) : Super(initializer) {
 	PrimaryComponentTick.TickInterval = 0.f;
 	PrimaryComponentTick.bCanEverTick = PrimaryComponentTick.bStartWithTickEnabled = true;
@@ -72,8 +76,7 @@ void UObjectSelectionComponent::SetSelection(UObjectSelection* newSelection) {
 	if (IsValid(Selection)) Selection->InvokeObjectsUnselected();
 	Selection = newSelection;
 	if (IsValid(Selection)) Selection->InvokeObjectsSelected();
-
-	OnSelectionChanged.Broadcast(Selection);
+	ProcessSelectionChanged();
 }
 
 bool UObjectSelectionComponent::OnMouseDown(const FGeometry& geometry, const FPointerEvent& event) {

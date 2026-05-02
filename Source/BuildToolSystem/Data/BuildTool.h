@@ -3,11 +3,6 @@
 #include "BuildToolSystem/TraceHitResult.h"
 #include "BuildTool.generated.h"
 
-typedef FHitResults;
-typedef FTraceHitResults;
-struct FTraceHitRangeResult;
-class UToolPropertiesEditorWidget;
-
 UCLASS(Abstract, Blueprintable)
 class BUILDTOOLSYSTEM_API UBuildTool : public UObject {
 	GENERATED_BODY()
@@ -47,7 +42,7 @@ protected:
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
-	bool RangeRaycast(const float radius, FTraceHitRangeResult& hit, const ECollisionChannel& channel = ECC_Visibility,
+	bool RangeRaycast(const float radius, struct FTraceHitRangeResult& hit, const ECollisionChannel& channel = ECC_Visibility,
 		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
 		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
 
@@ -64,7 +59,7 @@ public:
 
 	// Normally gets set during construction by the BuildToolComponent, but can be overridden directly
 	UPROPERTY(Category = "Tools", BlueprintReadWrite)
-	TSubclassOf<UToolPropertiesEditorWidget> ToolWidget;
+	TSubclassOf<class UToolPropertiesEditorWidget> ToolWidget;
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void OnStartTool() { }
@@ -74,6 +69,9 @@ public:
 	virtual void Tick(float delta) { }
 
 	virtual void InitializeTool(APlayerController* controller);
+	/* Returns true if the tool supports editing selection, if false the tool will be deactivated */
+	virtual bool OnSelectionChanged(const class UObjectSelection* selection) { return false; }
+
 	virtual bool OnKeyChar(const FGeometry& geometry, const FCharacterEvent& event) { return false; }
 	virtual bool OnKeyDown(const FGeometry& geometry, const FKeyEvent& event) { return false; }
 	virtual bool OnKeyUp(const FGeometry& geometry, const FKeyEvent& event) { return false; }

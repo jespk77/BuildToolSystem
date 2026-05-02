@@ -29,6 +29,8 @@ protected:
 	bool GetActorsInSelectionBox(FHitResults& hits) const;
 	void SetLocationAtDistance(FVector& locationStart, FVector& locationEnd, const float distance) const;
 
+	virtual void ProcessSelectionChanged();
+
 public:
 	UObjectSelectionComponent(const FObjectInitializer& initializer = FObjectInitializer::Get());
 	virtual void BeginPlay() override;
