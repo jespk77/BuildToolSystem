@@ -36,7 +36,13 @@ void UBuildToolComponent::ProcessSelectionChanged() {
 
 void UBuildToolComponent::ProcessToolChanged() {
 	OnToolChanged.Broadcast(ActiveToolIndex);
-	if (HasActiveTool()) SetSelection(nullptr);
+	if (UBuildTool* tool = GetActiveTool()) {
+		const bool supportSelection = tool->OnSelectionChanged(Selection);
+		if (!supportSelection) {
+			TOOLSYSTEM_LOG(Verbose, "Active tool does not support editing current selection, deselecting everything...");
+			SetSelection(nullptr);
+		}
+	}
 }
 
 void UBuildToolComponent::BeginPlay() {
@@ -48,6 +54,12 @@ void UBuildToolComponent::TickComponent(float delta, ELevelTick tick, FActorComp
 	Super::TickComponent(delta, tick, function);
 
 	if (UBuildTool* tool = GetActiveTool()) tool->Tick(delta);
+}
+
+const FRaycastParameters& UBuildToolComponent::GetActiveRaycastParameters() const {
+	if (const UBuildTool* tool = GetActiveTool())
+		if (tool->UseRaycastParametersForSelection) return tool->RaycastParameters;
+	return Super::GetActiveRaycastParameters();
 }
 
 void UBuildToolComponent::SetActiveTool(int32 toolIndex) {

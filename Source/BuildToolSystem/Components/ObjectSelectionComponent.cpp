@@ -13,15 +13,15 @@ bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const
 
 	FVector start = startCenter;
 	const FVector direction = (endCenter - startCenter).GetSafeNormal();
-	const ECollisionChannel channel = GetDefault<UBuildToolSettings>()->SelectionTraceChannel;
 	const float totalDistance = (endCenter - startCenter).Length();
 	startExtents.Z = endExtents.Z = StepDistance / 2;
+	const FRaycastParameters& parameters = GetActiveRaycastParameters();
 
 	for (float distance = 0.f; distance < totalDistance; distance += StepDistance) {
 		FHitResults results;
 		const FVector end = start + (direction * StepDistance);
 		const FVector extent = FMath::Lerp(startExtents, endExtents, distance / totalDistance);
-		GetWorld()->SweepMultiByChannel(results, start, end, FQuat(), channel, FCollisionShape::MakeBox(extent));
+		GetWorld()->SweepMultiByChannel(results, start, end, FQuat(), parameters.Channel, FCollisionShape::MakeBox(extent), parameters.Query, parameters.Response);
 #if SELECTION_DEBUG
 		DrawDebugBox(GetWorld(), start, extent, FColor::Cyan, false, 5.f, 1, 1.f);
 		DrawDebugLine(GetWorld(), start, end, FColor::Cyan, false, 5.f, 1, 1.f);

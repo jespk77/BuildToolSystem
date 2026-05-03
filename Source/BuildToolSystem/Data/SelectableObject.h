@@ -32,6 +32,6 @@ public:
 	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	void OnObjectUnselected();
 
-	UFUNCTION(Category = "Interface", BlueprintNativeEvent)
+	UFUNCTION(Category = "Selection", BlueprintNativeEvent)
 	TSubclassOf<UUserWidget> GetEditorWidgetClass(const UObjectSelection* selection) const;
 };

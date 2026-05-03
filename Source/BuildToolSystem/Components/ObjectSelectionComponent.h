@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../TraceHitResult.h"
+#include "../RaycastParameters.h"
 #include "ObjectSelectionComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectionChanged, const class UObjectSelection*, Selection);
@@ -27,12 +28,16 @@ protected:
 	bool GetActorsInSelectionBox(FHitResults& hits) const;
 	void SetLocationAtDistance(FVector& locationStart, FVector& locationEnd, const float distance) const;
 
+	UPROPERTY(Category = "Selection", EditAnywhere, BlueprintReadOnly)
+	FRaycastParameters SelectionRaycastParameters;
+
 	virtual void ProcessSelectionChanged();
 
 public:
 	UObjectSelectionComponent(const FObjectInitializer& initializer = FObjectInitializer::Get());
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;
+	virtual const FRaycastParameters& GetActiveRaycastParameters() const { return SelectionRaycastParameters; }
 
 	UPROPERTY(Category = "Events", BlueprintAssignable)
 	FOnSelectionChanged OnSelectionChanged;

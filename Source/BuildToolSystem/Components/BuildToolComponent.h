@@ -28,6 +28,7 @@ protected:
 public:
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;
+	virtual const FRaycastParameters& GetActiveRaycastParameters() const override;
 
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UToolData> ToolData;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../TraceHitResult.h"
+#include "../RaycastParameters.h"
 #include "BuildTool.generated.h"
 
 UCLASS(Abstract, Blueprintable)
@@ -18,38 +19,21 @@ protected:
 	UPROPERTY(Category = "Events", BlueprintReadWrite)
 	bool GenerateDoublePressedEvents = false;
 
-	bool Raycast(FHitResult& hit, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
+	bool Raycast(FHitResult& hit) const;
+	bool Raycast(FHitResults& hits) const;
 
-	bool Raycast(FHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-
-	bool RangeRaycast(const float radius, FHitResult& hit, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-
-	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResult& resultHit, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-
-	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-
-	bool RangeRaycast(const float radius, FHitResult& lineHit, FTraceHitResults& hits, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
-
-	bool RangeRaycast(const float radius, struct FTraceHitRangeResult& hit, const ECollisionChannel& channel = ECC_Visibility,
-		const FCollisionQueryParams& queryParams = FCollisionQueryParams::DefaultQueryParam,
-		const FCollisionResponseParams& responseParams = FCollisionResponseParams::DefaultResponseParam) const;
+	bool RangeRaycast(const float radius, FHitResult& hit) const;
+	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResult& resultHit) const;
+	bool RangeRaycast(const float radius, FHitResult& lineHit, FHitResults& hits) const;
+	bool RangeRaycast(const float radius, FHitResult& lineHit, FTraceHitResults& hits) const;
+	bool RangeRaycast(const float radius, struct FTraceHitRangeResult& hit) const;
 
 	template<class ControllerType>
 	inline ControllerType* GetController() const { return Cast<ControllerType>(OwnedController); }
 
 public:
+	UBuildTool(const FObjectInitializer& initializer = FObjectInitializer::Get());
+
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
 	FName ToolName = NAME_None;
 
@@ -61,6 +45,13 @@ public:
 	UPROPERTY(Category = "Tools", BlueprintReadWrite)
 	TSubclassOf<class UToolPropertiesEditorWidget> ToolWidget;
 
+	/* Whether the tool's raycast parameters should be used for selecting objects while the tool is active, if false the default selection parameters are used */
+	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
+	bool UseRaycastParametersForSelection = false;
+	/* Customization options for doing raycasts within this tool */
+	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
+	FRaycastParameters RaycastParameters;
+
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void OnStartTool() { }
 	UFUNCTION(Category = "Tools", BlueprintCallable)
@@ -68,8 +59,10 @@ public:
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void Tick(float delta) { }
 
+	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void InitializeTool(APlayerController* controller);
-	/* Returns true if the tool supports editing selection, if false the tool will be deactivated */
+	/* Returns true if the tool supports editing objects in the current selection, if false the tool will be deactivated */
+	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual bool OnSelectionChanged(const class UObjectSelection* selection) { return false; }
 
 	virtual bool OnKeyChar(const FGeometry& geometry, const FCharacterEvent& event) { return false; }
