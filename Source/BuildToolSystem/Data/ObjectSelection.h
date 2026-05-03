@@ -50,4 +50,5 @@ public:
 	UObjectSelection* SetSelectedObjects(TArray<UObject*>& objects) const { TSet<UObject*> newSet(objects); return SetSelectedObjects(newSet); }
 
 	bool operator==(const UObjectSelection* other) const;
+	FString ToLogString(const bool advanced = false) const;
 };

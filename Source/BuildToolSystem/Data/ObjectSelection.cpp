@@ -100,3 +100,15 @@ bool UObjectSelection::operator==(const UObjectSelection* other) const {
 	if (!thisValid || !otherValid) return thisValid == otherValid;
 	return SelectedObjects.Difference(other->SelectedObjects).IsEmpty();
 }
+
+FString UObjectSelection::ToLogString(const bool advanced) const {
+	FString result = FString::Format(TEXT("[Object Selection] {0} objects selected"), { GetObjectCount() });
+	if (advanced) {
+		FStringBuilderBase builder;
+		builder.Append(result);
+		for (const UObject* obj : SelectedObjects)
+			if (obj) builder.Appendf(TEXT("\n - %s"), *obj->GetName());
+		return FString(builder);
+	}
+	else return result;
+}

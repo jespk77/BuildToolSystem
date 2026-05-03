@@ -27,7 +27,10 @@ void UBuildToolComponent::ProcessSelectionChanged() {
 
 	if (UBuildTool* tool = GetActiveTool()) {
 		const bool supportSelection = tool->OnSelectionChanged(Selection);
-		if (Selection && !supportSelection) SetActiveTool(INDEX_NONE);
+		if (Selection && !supportSelection) {
+			TOOLSYSTEM_LOG(Verbose, "Active tool does not support editing current selection, deactivating...");
+			SetActiveTool(INDEX_NONE);
+		}
 	}
 }
 
@@ -74,6 +77,7 @@ void UBuildToolComponent::SetActiveToolByName(const FString name) {
 		}
 	}
 
+	TOOLSYSTEM_LOG(Verbose, "No tool found with name '%s'", *name);
 	SetActiveTool(INDEX_NONE);
 }
 

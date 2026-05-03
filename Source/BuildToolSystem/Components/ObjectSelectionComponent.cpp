@@ -30,6 +30,7 @@ bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const
 		start = end;
 	}
 
+	TOOLSYSTEM_LOG(Verbose, "Found %d actors in selected area", hits.Num());
 	return !hits.IsEmpty();
 }
 
@@ -74,6 +75,12 @@ void UObjectSelectionComponent::SetSelection(UObjectSelection* newSelection) {
 	if (IsValid(Selection)) Selection->InvokeObjectsUnselected();
 	Selection = newSelection;
 	if (IsValid(Selection)) Selection->InvokeObjectsSelected();
+
+#if SELECTION_DEBUG
+	TOOLSYSTEM_LOG(Verbose, "Selection changed: %s", Selection ? *(Selection->ToLogString(true)) : TEXT("null"));
+#else
+	TOOLSYSTEM_LOG(Verbose, "Selection changed: %d objects selected", Selection ? Selection->GetObjectCount() : 0);
+#endif
 	ProcessSelectionChanged();
 }
 
