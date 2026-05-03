@@ -1,7 +1,7 @@
 #include "ToolPropertiesWidget.h"
-#include "BuildToolSystem/Components/BuildToolComponent.h"
-#include "BuildToolSystem/Data/BuildTool.h"
-#include "BuildToolSystem/BuildToolSystem.h"
+#include "../Components/BuildToolComponent.h"
+#include "../Data/BuildTool.h"
+#include "../BuildToolSystemLog.h"
 
 void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {
 	ensureAlways(newTool);
@@ -51,7 +51,7 @@ void UToolPropertiesWidget::NativePreConstruct() {
 	if (!IsDesignTime()) {
 		ToolComponent = GetOwningPlayer() ? GetOwningPlayer()->GetComponentByClass<UBuildToolComponent>() : nullptr;
 		if (IsValid(ToolComponent)) ToolComponent->OnToolChanged.AddDynamic(this, &UToolPropertiesWidget::OnActiveToolChanged);
-		else UE_LOG(LogToolSystem, Warning, TEXT("UToolPropertiesWidget: No BuildToolComponent found on PlayerController"));
+		else TOOLSYSTEM_LOG(Warning, "No BuildToolComponent found on PlayerController");
 	}
 
 	SetVisibility(ESlateVisibility::Collapsed);

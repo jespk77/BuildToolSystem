@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BuildToolSystem/TraceHitResult.h"
+#include "../TraceHitResult.h"
 #include "ObjectSelectionComponent.generated.h"
 
 class UObjectSelection;

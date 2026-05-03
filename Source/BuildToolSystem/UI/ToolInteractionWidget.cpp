@@ -1,5 +1,5 @@
 #include "ToolInteractionWidget.h"
-#include "BuildToolSystem/Components/BuildToolComponent.h"
+#include "../Components/BuildToolComponent.h"
 
 TSharedRef<SWidget> UToolInteractionWidget::RebuildWidget() {
 	return SAssignNew(Overlay, SOverlay);

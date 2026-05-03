@@ -1,5 +1,5 @@
 #include "SelectableObject.h"
-#include "BuildToolSystem/BuildToolSystem.h"
+#include "../BuildToolSystemLog.h"
 
 UMeshComponent* ISelectableObject::FindBestMeshComponent(AActor* actor) {
 	UMeshComponent* result = nullptr;
@@ -20,14 +20,14 @@ UMeshComponent* ISelectableObject::FindBestMeshComponent(AActor* actor) {
 void ISelectableObject::SelectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
-	UE_LOG(LogToolSystem, Log, TEXT("Object '%s' selected"), *obj->GetName());
+	TOOLSYSTEM_LOG(Verbose, "Object '%s' selected", *obj->GetName());
 	if (AActor* actor = Cast<AActor>(obj)) {
 		if (UMeshComponent* mesh = FindBestMeshComponent(actor)) {
-			UE_LOG(LogToolSystem, Log, TEXT("Highlighting mesh component '%s'"), *mesh->GetName());
+			TOOLSYSTEM_LOG(Verbose, "Highlighting mesh component '%s'", *mesh->GetName());
 			mesh->SetCustomDepthStencilValue(255.f);
 			mesh->SetRenderCustomDepth(true);
 		}
-		else UE_LOG(LogToolSystem, Warning, TEXT("Selected object does not have a mesh component to highlight :("));
+		else TOOLSYSTEM_LOG(Warning, "Selected object does not have a mesh component to highlight :(");
 	}
 
 	Execute_OnObjectSelected(obj);
@@ -36,10 +36,10 @@ void ISelectableObject::SelectObject(UObject* obj) {
 void ISelectableObject::UnselectObject(UObject* obj) {
 	if (!IsValid(obj)) return;
 
-	UE_LOG(LogToolSystem, Log, TEXT("Object '%s' unselected"), *obj->GetName());
+	TOOLSYSTEM_LOG(Verbose, "Object '%s' unselected", *obj->GetName());
 	if (AActor* actor = Cast<AActor>(obj)) {
 		if (UMeshComponent* mesh = FindBestMeshComponent(actor)) {
-			UE_LOG(LogToolSystem, Log, TEXT("Removing highlight from mesh component '%s'"), *mesh->GetName());
+			TOOLSYSTEM_LOG(Verbose, "Removing highlight from mesh component '%s'", *mesh->GetName());
 			mesh->SetRenderCustomDepth(false);
 			mesh->SetCustomDepthStencilValue(0.f);
 		}

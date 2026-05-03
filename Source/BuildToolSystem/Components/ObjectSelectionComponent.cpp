@@ -1,9 +1,7 @@
 #include "ObjectSelectionComponent.h"
-#include "BuildToolSystem/Data/ObjectSelection.h"
-#include "BuildToolSystem/Data/SelectableObject.h"
-#include "BuildToolSystem/BuildToolSettings.h"
-
-#define SELECTION_DEBUG 0
+#include "../Data/ObjectSelection.h"
+#include "../Data/SelectableObject.h"
+#include "../BuildToolSystemLog.h"
 
 constexpr float StepDistance = 300.f;
 
@@ -24,7 +22,7 @@ bool UObjectSelectionComponent::GetActorsInSelectionBox(FHitResults& hits) const
 		const FVector end = start + (direction * StepDistance);
 		const FVector extent = FMath::Lerp(startExtents, endExtents, distance / totalDistance);
 		GetWorld()->SweepMultiByChannel(results, start, end, FQuat(), channel, FCollisionShape::MakeBox(extent));
-#if WITH_EDITOR && SELECTION_DEBUG
+#if SELECTION_DEBUG
 		DrawDebugBox(GetWorld(), start, extent, FColor::Cyan, false, 5.f, 1, 1.f);
 		DrawDebugLine(GetWorld(), start, end, FColor::Cyan, false, 5.f, 1, 1.f);
 #endif
@@ -117,5 +115,3 @@ bool UObjectSelectionComponent::OnMouseMove(const FGeometry& geometry, const FPo
 	SetLocationAtDistance(SelectionBoxStart.Max, SelectionBoxEnd.Max, 10000.f);
 	return true;
 }
-
-#undef SELECTION_DEBUG

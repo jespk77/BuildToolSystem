@@ -1,6 +1,6 @@
 #pragma once
 
-#include "BuildToolSystem/TraceHitResult.h"
+#include "../TraceHitResult.h"
 #include "BuildTool.generated.h"
 
 UCLASS(Abstract, Blueprintable)

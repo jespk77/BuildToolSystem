@@ -1,6 +1,5 @@
 #pragma once
 
-DECLARE_LOG_CATEGORY_EXTERN(LogToolSystem, Log, Log);
 
 class FBuildToolSystemModule : public IModuleInterface {
 public:

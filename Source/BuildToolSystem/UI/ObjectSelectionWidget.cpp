@@ -1,8 +1,9 @@
 #include "ObjectSelectionWidget.h"
-#include "BuildToolSystem/Components/ObjectSelectionComponent.h"
-#include "BuildToolSystem/Data/ObjectSelection.h"
-#include "BuildToolSystem/Data/SelectableObject.h"
-#include "BuildToolSystem/BuildToolSystem.h"
+#include "../Components/ObjectSelectionComponent.h"
+#include "../Data/ObjectSelection.h"
+#include "../Data/SelectableObject.h"
+#include "../BuildToolSystemLog.h"
+
 #include "BlueprintUtilities/BlueprintFunctionLibrary/ClassUtilities.h"
 
 void USelectionEditorWidget::InitializeSelection(UObjectSelection* newSelection) {
@@ -59,7 +60,7 @@ void UObjectSelectionWidget::NativePreConstruct() {
 	if (!IsDesignTime()) {
 		SelectionComponent = GetOwningPlayer()->GetComponentByClass<UObjectSelectionComponent>();
 		if (IsValid(SelectionComponent)) SelectionComponent->OnSelectionChanged.AddDynamic(this, &UObjectSelectionWidget::OnSelectionChanged);
-		else UE_LOG(LogToolSystem, Log, TEXT("UObjectSelectionWidget: No ObjectSelectionComponent found on PlayerController"));
+		else TOOLSYSTEM_LOG(Warning, "No ObjectSelectionComponent found on PlayerController");
 	}
 
 	SetVisibility(ESlateVisibility::Collapsed);

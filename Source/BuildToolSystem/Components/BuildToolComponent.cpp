@@ -1,12 +1,12 @@
 #include "BuildToolComponent.h"
-#include "BuildToolSystem/Data/BuildTool.h"
-#include "BuildToolSystem/Data/ToolData.h"
-#include "BuildToolSystem/BuildToolSystem.h"
+#include "../Data/BuildTool.h"
+#include "../Data/ToolData.h"
+#include "../BuildToolSystemLog.h"
 
 void UBuildToolComponent::CreateTools() {
 	TArray<FToolSettings> toolTypes;
 	if (ToolData) ToolData->GetTools(toolTypes);
-	UE_LOG(LogToolSystem, Log, TEXT("Found and creating custom %d tool classes..."), toolTypes.Num());
+	TOOLSYSTEM_LOG(Verbose, "Found and creating custom %d tool classes...", toolTypes.Num());
 
 	Tools.Reset(toolTypes.Num());
 	for (const FToolSettings& settings : toolTypes) {
@@ -15,7 +15,7 @@ void UBuildToolComponent::CreateTools() {
 		UBuildTool* tool = NewObject<UBuildTool>(this, settings.ToolClass);
 		if (!tool->ToolWidget) tool->ToolWidget = settings.ToolWidget;
 		tool->InitializeTool(GetOwner<APlayerController>());
-		UE_LOG(LogToolSystem, Log, TEXT("Created tool with name '%s'"), *tool->ToolName.ToString());
+		TOOLSYSTEM_LOG(Verbose, "Created tool with name '%s'", *tool->ToolName.ToString());
 		Tools.Add(tool);
 	}
 
@@ -52,17 +52,17 @@ void UBuildToolComponent::SetActiveTool(int32 toolIndex) {
 	if (newIndex == ActiveToolIndex) newIndex = INDEX_NONE;
 
 	if (UBuildTool* tool = GetActiveTool()) {
-		UE_LOG(LogToolSystem, Log, TEXT("Deactivating tool '%s'"), *tool->ToolName.ToString());
+		TOOLSYSTEM_LOG(Verbose, "Deactivating tool '%s'", *tool->ToolName.ToString());
 		tool->OnEndTool();
 	}
 
 	ActiveToolIndex = newIndex;
 	if (UBuildTool* tool = GetActiveTool()) {
-		UE_LOG(LogToolSystem, Log, TEXT("Activating tool '%s'"), *tool->ToolName.ToString());
+		TOOLSYSTEM_LOG(Verbose, "Activating tool '%s'", *tool->ToolName.ToString());
 		tool->OnStartTool();
 		if (tool->TickTime >= 0) SetComponentTickEnabled(true);
 	}
-	else UE_LOG(LogToolSystem, Log, TEXT("No tool active"));
+	else TOOLSYSTEM_LOG(Verbose, "No tool active");
 	ProcessToolChanged();
 }
 

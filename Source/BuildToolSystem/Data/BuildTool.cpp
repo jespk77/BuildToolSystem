@@ -1,8 +1,6 @@
 #include "BuildTool.h"
-#include "BuildToolSystem/TraceHitResult.h"
-#include "BuildToolSystem/BuildToolSystem.h"
-
-#define RAYCAST_DEBUG 0
+#include "../TraceHitResult.h"
+#include "../BuildToolSystemLog.h"
 
 #if RAYCAST_DEBUG
 #include "Components/LineBatchComponent.h"
@@ -11,7 +9,7 @@
 bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 	const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
 	if (!OwnedController) {
-		UE_LOG(LogToolSystem, Error, TEXT("No owned controller, tool raycast cannot execute"));
+		TOOLSYSTEM_LOG(Error, "No owned controller, tool raycast cannot execute");
 		return false;
 	}
 
@@ -20,7 +18,7 @@ bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 
 	const FVector end = location + (direction * OwnedController->HitResultTraceDistance);
 #if RAYCAST_DEBUG
-	GetWorld()->LineBatcher->DrawLine(location, end, FColor::Red, 0, 5, 10.f);
+	GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine(location, end, FColor::Red, 0, 5, 10.f);
 #endif
 	return GetWorld()->LineTraceSingleByChannel(hit, location, end, channel, queryParams, responseParams);
 }
@@ -28,7 +26,7 @@ bool UBuildTool::Raycast(FHitResult& hit, const ECollisionChannel& channel,
 bool UBuildTool::Raycast(FHitResults& hits, const ECollisionChannel& channel,
 	const FCollisionQueryParams& queryParams, const FCollisionResponseParams& responseParams) const {
 	if (!OwnedController) {
-		UE_LOG(LogToolSystem, Error, TEXT("No owned controller, tool raycast cannot execute"));
+		TOOLSYSTEM_LOG(Error, "No owned controller, tool raycast cannot execute");
 		return false;
 	}
 
@@ -37,7 +35,7 @@ bool UBuildTool::Raycast(FHitResults& hits, const ECollisionChannel& channel,
 
 	const FVector end = location + (direction * OwnedController->HitResultTraceDistance);
 #if RAYCAST_DEBUG
-	GetWorld()->LineBatcher->DrawLine(location, end, FColor::Red, 0, 5, 10.f);
+	GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine(location, end, FColor::Red, 0, 5, 10.f);
 #endif
 	return GetWorld()->LineTraceMultiByChannel(hits, location, end, channel, queryParams, responseParams);
 }
@@ -72,7 +70,6 @@ bool UBuildTool::RangeRaycast(const float radius, FTraceHitRangeResult& hit, con
 	return RangeRaycast(radius, hit.Line, hit.Hits, channel, queryParams, responseParams);
 }
 
-#undef RAYCAST_DEBUG
 
 void UBuildTool::InitializeTool(APlayerController* controller) {
 	ensure(controller);

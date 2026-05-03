@@ -1,6 +1,7 @@
 #include "BuildToolSystem.h"
 
 #define LOCTEXT_NAMESPACE "FBuildToolSystemModule"
+#include "BuildToolSystemLog.h"
 
 DEFINE_LOG_CATEGORY(LogToolSystem);
 

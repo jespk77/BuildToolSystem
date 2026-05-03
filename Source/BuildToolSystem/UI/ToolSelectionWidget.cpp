@@ -1,7 +1,8 @@
 #include "ToolSelectionWidget.h"
+#include "../Components/BuildToolComponent.h"
+#include "../Data/BuildTool.h"
+
 #include "CoreGameUI/Elements/ToggleableButton.h"
-#include "BuildToolSystem/Components/BuildToolComponent.h"
-#include "BuildToolSystem/Data/BuildTool.h"
 
 void UToolSelectionWidget::OnToolsInitialized() {
 	if (IsValid(ToolComponent)) {
