@@ -3,9 +3,7 @@
 #include "../TraceHitResult.h"
 #include "ObjectSelectionComponent.generated.h"
 
-class UObjectSelection;
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectionChanged, const UObjectSelection*, Selection);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSelectionChanged, const class UObjectSelection*, Selection);
 
 UCLASS(Within = PlayerController, meta = (BlueprintSpawnableComponent))
 class BUILDTOOLSYSTEM_API UObjectSelectionComponent : public UActorComponent {
@@ -15,7 +13,7 @@ protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwnedController;
 	UPROPERTY(Category = "References", VisibleInstanceOnly, Instanced, BlueprintReadOnly, Transient)
-	TObjectPtr<UObjectSelection> Selection;
+	TObjectPtr<class UObjectSelection> Selection;
 
 	UPROPERTY(Category = "Input", BlueprintReadOnly)
 	bool IsDragging = false;
@@ -40,10 +38,10 @@ public:
 	FOnSelectionChanged OnSelectionChanged;
 
 	UFUNCTION(Category = "Selection", BlueprintCallable)
-	UObjectSelection* GetSelection() { return Selection; }
-	const UObjectSelection* GetSelection() const { return Selection; }
+	class UObjectSelection* GetSelection() { return Selection; }
+	const class UObjectSelection* GetSelection() const { return Selection; }
 	UFUNCTION(Category = "Selection", BlueprintCallable)
-	void SetSelection(UObjectSelection* newSelection);
+	void SetSelection(class UObjectSelection* newSelection);
 
 	virtual bool OnMouseDown(const FGeometry& geometry, const FPointerEvent& event);
 	virtual bool OnMouseUp(const FGeometry& geometry, const FPointerEvent& event);

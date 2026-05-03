@@ -3,9 +3,6 @@
 #include "ObjectSelectionComponent.h"
 #include "BuildToolComponent.generated.h"
 
-class UBuildTool;
-class UToolData;
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnToolsInitialized);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActiveToolChanged, int32, ToolIndex);
 
@@ -20,7 +17,7 @@ protected:
 	UPROPERTY(Category = "References", BlueprintReadOnly)
 	TObjectPtr<APlayerController> OwningController;
 	UPROPERTY(Category = "References", VisibleInstanceOnly, BlueprintReadOnly, meta = (EditInline))
-	TArray<TObjectPtr<UBuildTool>> Tools;
+	TArray<TObjectPtr<class UBuildTool>> Tools;
 
 	UPROPERTY(Category = "Tools", VisibleInstanceOnly, BlueprintReadOnly)
 	int32 ActiveToolIndex = INDEX_NONE;
@@ -33,7 +30,7 @@ public:
 	virtual void TickComponent(float delta, ELevelTick tick, FActorComponentTickFunction* function) override;
 
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadOnly)
-	TObjectPtr<UToolData> ToolData;
+	TObjectPtr<class UToolData> ToolData;
 
 	UPROPERTY(Category = "Tools", BlueprintAssignable)
 	FOnToolsInitialized OnToolsInitialized;
@@ -41,15 +38,15 @@ public:
 	FOnActiveToolChanged OnToolChanged;
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
-	const TArray<UBuildTool*>& GetTools() const { return Tools; }
-	TArray<TObjectPtr<UBuildTool>>::TConstIterator GetToolIterator() const { return Tools; }
+	const TArray<class UBuildTool*>& GetTools() const { return Tools; }
+	TArray<TObjectPtr<class UBuildTool>>::TConstIterator GetToolIterator() const { return Tools; }
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	bool HasActiveTool() const { return Tools.IsValidIndex(ActiveToolIndex); }
 
-	const UBuildTool* GetActiveTool() const { return HasActiveTool() ? Tools[ActiveToolIndex] : nullptr; }
+	const class UBuildTool* GetActiveTool() const { return HasActiveTool() ? Tools[ActiveToolIndex] : nullptr; }
 	UFUNCTION(Category = "Tools", BlueprintCallable)
-	UBuildTool* GetActiveTool() { return Tools.IsValidIndex(ActiveToolIndex) ? Tools[ActiveToolIndex] : nullptr; }
+	class UBuildTool* GetActiveTool() { return Tools.IsValidIndex(ActiveToolIndex) ? Tools[ActiveToolIndex] : nullptr; }
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	void SetActiveTool(int32 toolIndex);
