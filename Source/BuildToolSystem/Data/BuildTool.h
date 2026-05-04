@@ -4,6 +4,8 @@
 #include "../RaycastParameters.h"
 #include "BuildTool.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FToolEvent);
+
 UCLASS(Abstract, Blueprintable)
 class BUILDTOOLSYSTEM_API UBuildTool : public UObject {
 	GENERATED_BODY()
@@ -51,6 +53,9 @@ public:
 	/* Customization options for doing raycasts within this tool */
 	UPROPERTY(Category = "Tools", EditAnywhere, BlueprintReadWrite)
 	FRaycastParameters RaycastParameters;
+
+	UPROPERTY(Category = "Tools", BlueprintAssignable)
+	FToolEvent OnSelectionUpdated;
 
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void OnStartTool() { }

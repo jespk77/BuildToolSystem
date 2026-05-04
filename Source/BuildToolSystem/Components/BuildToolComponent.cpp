@@ -1,4 +1,3 @@
-#include "BuildToolComponent.h"
 #include "../Data/BuildTool.h"
 #include "../Data/ToolData.h"
 #include "../BuildToolSystemLog.h"
@@ -27,7 +26,8 @@ void UBuildToolComponent::ProcessSelectionChanged() {
 
 	if (UBuildTool* tool = GetActiveTool()) {
 		const bool supportSelection = tool->OnSelectionChanged(Selection);
-		if (Selection && !supportSelection) {
+		if (supportSelection) tool->OnSelectionUpdated.Broadcast();
+		else if (Selection) {
 			TOOLSYSTEM_LOG(Verbose, "Active tool does not support editing current selection, deactivating...");
 			SetActiveTool(INDEX_NONE);
 		}
@@ -42,6 +42,8 @@ void UBuildToolComponent::ProcessToolChanged() {
 			TOOLSYSTEM_LOG(Verbose, "Active tool does not support editing current selection, deselecting everything...");
 			SetSelection(nullptr);
 		}
+		// fire the update event from here? otherwise the each tool would have to fire the event itself as you don't know what it's gonna return beforehand
+		else tool->OnSelectionUpdated.Broadcast();
 	}
 }
 

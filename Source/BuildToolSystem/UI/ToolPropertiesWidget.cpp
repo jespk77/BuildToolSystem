@@ -3,9 +3,16 @@
 #include "../Data/BuildTool.h"
 #include "../BuildToolSystemLog.h"
 
+void UToolPropertiesEditorWidget::NativeDestruct() {
+	Super::NativeDestruct();
+	if (Tool) Tool->OnSelectionUpdated.RemoveDynamic(this, &UToolPropertiesEditorWidget::OnToolSelectionUpdated);
+	Tool = nullptr;
+}
+
 void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {
 	ensureAlways(newTool);
 	Tool = newTool;
+	if (Tool) Tool->OnSelectionUpdated.AddDynamic(this, &UToolPropertiesEditorWidget::OnToolSelectionUpdated);
 	IPropertyWidgetContainer::Execute_SetObjectOnPropertyWidgets(this, Tool);
 }
 

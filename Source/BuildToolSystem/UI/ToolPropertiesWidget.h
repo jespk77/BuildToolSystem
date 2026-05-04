@@ -4,21 +4,25 @@
 #include "CoreGameUI/Widgets/PropertyWidgetContainer.h"
 #include "ToolPropertiesWidget.generated.h"
 
-class UBuildTool;
-class UBuildToolComponent;
-
 UCLASS(Abstract)
 class BUILDTOOLSYSTEM_API UToolPropertiesEditorWidget : public UUserWidget, public IPropertyWidgetContainer {
 	GENERATED_BODY()
 
 protected:
 	UPROPERTY(Category = "Tools", BlueprintReadOnly)
-	TObjectPtr<UBuildTool> Tool;
+	TObjectPtr<class UBuildTool> Tool;
 
 	template<class ToolClass>
 	ToolClass* GetTool() const { return Cast<ToolClass>(Tool); }
+	UFUNCTION(Category="Tools", BlueprintCallable, meta=(DeterminesOutputType="toolClass"))
+	class UBuildTool* GetToolAs(TSubclassOf<class UBuildTool> toolClass) const { return Tool; }
+
+	UFUNCTION(Category = "Tools", BlueprintImplementableEvent)
+	void OnToolSelectionUpdated();
 
 public:
+	virtual void NativeDestruct() override;
+
 	UFUNCTION(Category = "Tools", BlueprintCallable)
 	virtual void InitializeTool(UBuildTool* newTool);
 };
@@ -36,7 +40,7 @@ protected:
 	TSharedPtr<SBorder> Container;
 
 	UPROPERTY(Category = "Tools", BlueprintReadOnly)
-	TObjectPtr<UBuildToolComponent> ToolComponent;
+	TObjectPtr<class UBuildToolComponent> ToolComponent;
 
 	UPROPERTY(Category = "Tools", BlueprintReadOnly)
 	TObjectPtr<UUserWidget> EditorWidget;
