@@ -1,3 +1,4 @@
+#include "BuildToolComponent.h"
 #include "../Data/BuildTool.h"
 #include "../Data/ToolData.h"
 #include "../BuildToolSystemLog.h"
