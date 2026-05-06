@@ -1,12 +1,33 @@
 #include "ToolPropertiesWidget.h"
 #include "../Components/BuildToolComponent.h"
+#include "Components/NamedSlot.h"
 #include "../Data/BuildTool.h"
 #include "../BuildToolSystemLog.h"
+
+UUserWidget* UToolPropertiesEditorWidget::GetOrCreateSelectionWidget(TSubclassOf<UUserWidget> widgetClass) {
+	if (SelectionEditorWidget && SelectionEditorWidget->GetClass() == widgetClass) return SelectionEditorWidget;
+	DestroySelectionWidget();
+
+	SelectionEditorWidget = CreateWidget(this, widgetClass);
+	if (ObjectEditorWidgetSlot) ObjectEditorWidgetSlot->SetContent(SelectionEditorWidget);
+	else SelectionEditorWidget->AddToViewport();
+	return SelectionEditorWidget;
+}
+
+void UToolPropertiesEditorWidget::DestroySelectionWidget() {
+	if (!SelectionEditorWidget) return;
+
+	if (ObjectEditorWidgetSlot) ObjectEditorWidgetSlot->SetContent(nullptr);
+	else SelectionEditorWidget->RemoveFromViewport();
+	SelectionEditorWidget->Destruct();
+	SelectionEditorWidget = nullptr;
+}
 
 void UToolPropertiesEditorWidget::NativeDestruct() {
 	Super::NativeDestruct();
 	if (Tool) Tool->OnSelectionUpdated.RemoveDynamic(this, &UToolPropertiesEditorWidget::OnToolSelectionUpdated);
 	Tool = nullptr;
+	DestroySelectionWidget();
 }
 
 void UToolPropertiesEditorWidget::InitializeTool(UBuildTool* newTool) {

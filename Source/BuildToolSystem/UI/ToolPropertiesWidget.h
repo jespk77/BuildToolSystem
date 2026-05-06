@@ -11,14 +11,23 @@ class BUILDTOOLSYSTEM_API UToolPropertiesEditorWidget : public UUserWidget, publ
 protected:
 	UPROPERTY(Category = "Tools", BlueprintReadOnly)
 	TObjectPtr<class UBuildTool> Tool;
+	UPROPERTY(Category = "Tools", BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<UNamedSlot> ObjectEditorWidgetSlot;
+	UPROPERTY(Category = "Tools", BlueprintReadOnly)
+	TObjectPtr<UUserWidget> SelectionEditorWidget;
 
 	template<class ToolClass>
 	ToolClass* GetTool() const { return Cast<ToolClass>(Tool); }
-	UFUNCTION(Category="Tools", BlueprintCallable, meta=(DeterminesOutputType="toolClass"))
+	UFUNCTION(Category = "Tools", BlueprintCallable, meta = (DeterminesOutputType = "toolClass"))
 	class UBuildTool* GetToolAs(TSubclassOf<class UBuildTool> toolClass) const { return Tool; }
 
 	UFUNCTION(Category = "Tools", BlueprintImplementableEvent)
 	void OnToolSelectionUpdated();
+
+	UFUNCTION(Category = "Tools", BlueprintCallable, meta = (DeterminesOutputType = "widgetClass"))
+	virtual UUserWidget* GetOrCreateSelectionWidget(TSubclassOf<UUserWidget> widgetClass);
+	UFUNCTION(Category = "Tools", BlueprintCallable)
+	virtual void DestroySelectionWidget();
 
 public:
 	virtual void NativeDestruct() override;
