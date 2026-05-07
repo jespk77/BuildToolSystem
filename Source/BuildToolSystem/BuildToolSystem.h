@@ -4,5 +4,6 @@
 #pragma warning(once: 4065) // switch statement contains 'default' but no 'case' labels
 #pragma warning(once: 4390) // empty control statement found
 #pragma warning(once: 4702) // unreachable code
+#pragma warning(once: 4800) // implicit conversion
 
 class FBuildToolSystemModule : public IModuleInterface { };
